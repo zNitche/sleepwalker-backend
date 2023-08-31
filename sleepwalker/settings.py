@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'sleepwalker.apps.authenticate',
 ]
 
@@ -78,7 +79,6 @@ MIGRATION_MODULES = {
     "authenticate": "database.migrations.authenticate"
 }
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 DATABASES = {
@@ -87,7 +87,6 @@ DATABASES = {
         'NAME': os.path.join(PROJECT_DIR, "database", "app.sqlite3"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -105,7 +104,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -115,3 +113,49 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Logging
+# https://docs.djangoproject.com/en/4.2/topics/logging/
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {asctime} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "formatter": "verbose",
+            "filename": os.path.join(PROJECT_DIR, "logs", "log.log"),
+        }
+    },
+    "loggers": {
+        "main": {
+            "level": "INFO",
+            "handlers": ["file"],
+        },
+        "dev": {
+            "handlers": ["console"],
+            "propagate": True,
+            "level": "DEBUG",
+        }
+    },
+}
+
+LOGGER_NAME = "dev" if DEBUG else "main"
+
+AUTH_USER_MODEL = "authenticate.User"
