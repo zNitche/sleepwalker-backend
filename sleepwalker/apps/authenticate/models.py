@@ -25,7 +25,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class AuthToken(models.Model):
-    data = models.CharField(max_length=128, unique=True, null=False, default=token_utils.generate_token)
+    token = models.CharField(max_length=128, unique=True, null=False, default=token_utils.generate_token)
     creation_date = models.DateTimeField(null=False, default=datetime.datetime.utcnow)
     expiration_date = models.DateTimeField(null=False, default=token_utils.get_token_expiration_date)
     blacklisted = models.BooleanField(null=False, default=False)
@@ -42,4 +42,4 @@ class AuthToken(models.Model):
         return False if self.is_expired() or self.blacklisted else True
 
     def get_truncated_data(self):
-        return self.data[:10]
+        return self.token[:10]
