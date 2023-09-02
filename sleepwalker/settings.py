@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'sleepwalker.apps.authenticate',
+    'sleepwalker.apps.core',
 ]
 
 MIDDLEWARE = [
