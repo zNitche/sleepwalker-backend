@@ -9,7 +9,7 @@ class LogSessionAdmin(ModelAdmin):
 
 
 class BodySensorsLogAdmin(ModelAdmin):
-    list_display = ("uuid", "hear_beat", "acceleration_x", "acceleration_y", "acceleration_z", "date", "log_session")
+    list_display = ("uuid", "heart_beat", "acceleration_x", "acceleration_y", "acceleration_z", "date", "log_session")
     search_fields = ("log_session", "uuid")
 
     readonly_fields = ["uuid"]

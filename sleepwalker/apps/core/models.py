@@ -20,7 +20,7 @@ class LogSession(models.Model):
 class BodySensorsLog(models.Model):
     uuid = models.CharField(max_length=32, unique=True, null=False, default=models_utils.generate_uuid)
 
-    hear_beat = models.FloatField(null=False, default=0)
+    heart_beat = models.FloatField(null=False, default=0)
     acceleration_x = models.FloatField(null=False, default=0)
     acceleration_y = models.FloatField(null=False, default=0)
     acceleration_z = models.FloatField(null=False, default=0)
