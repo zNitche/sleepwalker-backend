@@ -1,6 +1,7 @@
 from django.conf import settings
 import datetime
 import secrets
+import uuid
 
 
 def generate_token():
@@ -9,3 +10,7 @@ def generate_token():
 
 def get_token_expiration_date():
     return datetime.datetime.utcnow() + settings.API_AUTH_TOKEN_LIFESPAN
+
+
+def generate_uuid():
+    return uuid.uuid4().hex

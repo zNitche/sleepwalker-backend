@@ -37,7 +37,7 @@ class CustomUserAdmin(UserAdmin):
 
 
 class AuthTokenAdmin(ModelAdmin):
-    list_display = ("get_truncated_data", "creation_date", "expiration_date", "blacklisted", "is_expired", "owner_id")
-    search_fields = ("owner_id", "token", "is_expired")
+    list_display = ("get_truncated_data", "creation_date", "expiration_date", "blacklisted", "is_expired", "user_id")
+    search_fields = ("user_id", "token", "is_expired")
 
-    readonly_fields = ["token", "creation_date", "expiration_date", "owner_id"]
+    readonly_fields = ["token", "creation_date", "expiration_date", "user_id"]

@@ -78,7 +78,8 @@ WSGI_APPLICATION = 'sleepwalker.wsgi.application'
 # DB Migrations
 # https://docs.djangoproject.com/en/4.2/ref/settings/#migration-modules
 MIGRATION_MODULES = {
-    "authenticate": "database.migrations.authenticate"
+    "authenticate": "database.migrations.authenticate",
+    "core": "database.migrations.core",
 }
 
 # Database

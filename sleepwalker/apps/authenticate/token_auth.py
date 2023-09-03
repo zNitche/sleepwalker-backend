@@ -10,7 +10,7 @@ class TokenAuth(authentication.BaseAuthentication):
         try:
             auth_token = models.AuthToken.objects.filter(token=token).first()
             if auth_token.is_valid():
-                user = auth_token.owner
+                user = auth_token.user
 
                 if user:
                     return (user, auth_token)

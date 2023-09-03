@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth import get_user_model
 import datetime
 from sleepwalker.apps.authenticate.managers import UserManager
-from sleepwalker.utils import token_utils
+from sleepwalker.utils import models_utils
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -25,12 +25,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class AuthToken(models.Model):
-    token = models.CharField(max_length=128, unique=True, null=False, default=token_utils.generate_token)
+    token = models.CharField(max_length=128, unique=True, null=False, default=models_utils.generate_token)
     creation_date = models.DateTimeField(null=False, default=datetime.datetime.utcnow)
-    expiration_date = models.DateTimeField(null=False, default=token_utils.get_token_expiration_date)
+    expiration_date = models.DateTimeField(null=False, default=models_utils.get_token_expiration_date)
     blacklisted = models.BooleanField(null=False, default=False)
 
-    owner = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True, related_name="auth_tokens")
+    user = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True, related_name="auth_tokens")
 
     def __str__(self):
         return self.get_truncated_data()

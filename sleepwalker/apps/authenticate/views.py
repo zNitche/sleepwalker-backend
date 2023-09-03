@@ -15,7 +15,7 @@ def login(request):
     user = authenticate(username=username, password=password)
 
     if user:
-        token = models.AuthToken.objects.create(owner=user)
+        token = models.AuthToken.objects.create(user=user)
         serializer = serializers.AuthTokenSerializer(token)
 
         return Response(serializer.data)
