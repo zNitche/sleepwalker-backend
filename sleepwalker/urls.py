@@ -20,5 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/", include("sleepwalker.apps.authenticate.urls")),
-    path("api/core/", include("sleepwalker.apps.core.urls")),
+    path("api/", include("sleepwalker.apps.core.urls")),
 ]
