@@ -4,6 +4,7 @@ from sleepwalker.apps.core import serializers
 from sleepwalker.apps.core import models
 from sleepwalker.apps.authenticate.token_auth import TokenAuth
 from sleepwalker.apps.core.paginators import LogSessionsPagination
+from django.shortcuts import get_object_or_404
 
 
 @api_view(["GET"])
@@ -16,3 +17,21 @@ def log_sessions(request):
     serializer = serializers.LogSessionSerializer(page_results, many=True)
 
     return paginator.get_paginated_response(serializer.data)
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuth])
+def body_sensors(request, session_uuid):
+    log_session = get_object_or_404(models.LogSession, uuid=session_uuid)
+    serializer = serializers.BodySensorsLogsSerializer(log_session.body_sensors_logs, many=True)
+
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuth])
+def environment_sensors(request, session_uuid):
+    log_session = get_object_or_404(models.LogSession, uuid=session_uuid)
+    serializer = serializers.EnvironmentSensorsLogsSerializer(log_session.environment_sensors_logs, many=True)
+
+    return Response(serializer.data)
