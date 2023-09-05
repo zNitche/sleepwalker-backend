@@ -31,7 +31,7 @@ class BodySensorsLog(models.Model):
                                     related_name="body_sensors_logs")
 
     def __str__(self):
-        return self.log_session.uuid
+        return self.uuid
 
 
 class EnvironmentSensorsLog(models.Model):
@@ -46,4 +46,4 @@ class EnvironmentSensorsLog(models.Model):
                                     related_name="environment_sensors_logs")
 
     def __str__(self):
-        return self.log_session.uuid
+        return self.uuid
