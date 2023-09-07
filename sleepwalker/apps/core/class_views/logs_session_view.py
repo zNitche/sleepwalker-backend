@@ -3,11 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from sleepwalker.apps.core import models
-from sleepwalker.apps.core.serializers.log_session_serializer import LogSessionSerializer
+from sleepwalker.apps.core.serializers.logs_session_serializer import LogSessionSerializer
 from sleepwalker.apps.authenticate.token_auth import TokenAuth
 
 
-class LogSessionView(APIView):
+class LogsSessionView(APIView):
     authentication_classes = [TokenAuth]
 
     def get(self, request, *args, **kwargs):

@@ -7,7 +7,7 @@ from sleepwalker.apps.core.serializers.environment_sensors_logs_serializer impor
 from sleepwalker.apps.authenticate.token_auth import TokenAuth
 
 
-class EnvironmentSensorsView(APIView):
+class EnvironmentSensorsLogsView(APIView):
     authentication_classes = [TokenAuth]
 
     def get(self, request, *args, **kwargs):

@@ -7,7 +7,7 @@ from sleepwalker.apps.core.serializers.body_sensors_logs_serializer import BodyS
 from sleepwalker.apps.authenticate.token_auth import TokenAuth
 
 
-class BodySenorsView(APIView):
+class BodySenorsLogsView(APIView):
     authentication_classes = [TokenAuth]
 
     def get(self, request, *args, **kwargs):

@@ -4,10 +4,10 @@ from rest_framework import status
 from sleepwalker.apps.core import models
 from sleepwalker.apps.core.paginators import LogSessionsPagination
 from sleepwalker.apps.authenticate.token_auth import TokenAuth
-from sleepwalker.apps.core.serializers.log_session_serializer import LogSessionSerializer
+from sleepwalker.apps.core.serializers.logs_session_serializer import LogSessionSerializer
 
 
-class LogSessionsView(APIView):
+class LogsSessionsView(APIView):
     authentication_classes = [TokenAuth]
 
     def get(self, request, *args, **kwargs):
