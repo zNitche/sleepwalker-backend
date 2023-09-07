@@ -21,4 +21,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/", include("sleepwalker.apps.authenticate.urls")),
     path("api/", include("sleepwalker.apps.core.urls")),
+    path("api/sessions/", include("sleepwalker.apps.logs_sessions.urls")),
 ]

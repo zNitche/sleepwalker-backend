@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from sleepwalker.apps.core import models
-from sleepwalker.apps.core.serializers.body_sensors_logs_serializer import BodySensorsLogsSerializer
+from sleepwalker.apps.logs_sessions import models
+from sleepwalker.apps.logs_sessions.serializers.body_sensors_logs_serializer import BodySensorsLogsSerializer
 from sleepwalker.apps.authenticate.token_auth import TokenAuth
 
 
@@ -11,7 +11,7 @@ class BodySenorsLogsView(APIView):
     authentication_classes = [TokenAuth]
 
     def get(self, request, *args, **kwargs):
-        log_session = get_object_or_404(models.LogSession, uuid=self.kwargs["session_uuid"])
+        log_session = get_object_or_404(models.LogsSession, uuid=self.kwargs["session_uuid"])
         serializer = BodySensorsLogsSerializer(log_session.body_sensors_logs, many=True)
 
         return Response(serializer.data)

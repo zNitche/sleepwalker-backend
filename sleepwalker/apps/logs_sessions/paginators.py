@@ -2,7 +2,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 
-class LogSessionsPagination(PageNumberPagination):
+class LogsSessionsPagination(PageNumberPagination):
     page_size = 20
     page_size_query_param = "items"
     max_page_size = 100

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'sleepwalker.apps.authenticate',
     'sleepwalker.apps.core',
+    'sleepwalker.apps.logs_sessions',
 ]
 
 MIDDLEWARE = [
@@ -80,6 +81,7 @@ WSGI_APPLICATION = 'sleepwalker.wsgi.application'
 MIGRATION_MODULES = {
     "authenticate": "database.migrations.authenticate",
     "core": "database.migrations.core",
+    "logs_sessions": "database.migrations.logs_sessions"
 }
 
 # Database

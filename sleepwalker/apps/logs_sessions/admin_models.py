@@ -1,7 +1,7 @@
 from django.contrib.admin import ModelAdmin
 
 
-class LogSessionAdmin(ModelAdmin):
+class LogsSessionAdmin(ModelAdmin):
     list_display = ("uuid", "start_date", "end_date", "user_id")
     search_fields = ("uuid", )
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from sleepwalker.apps.core import models
+from sleepwalker.apps.logs_sessions import models
 
 
 class EnvironmentSensorsLogsSerializer(serializers.ModelSerializer):
@@ -9,7 +9,7 @@ class EnvironmentSensorsLogsSerializer(serializers.ModelSerializer):
         read_only_fields = ["uuid", "date"]
 
     def create(self, validated_data):
-        log_session = models.LogSession.objects.filter(uuid=validated_data["session_uuid"]).first()
+        log_session = models.LogsSession.objects.filter(uuid=validated_data["session_uuid"]).first()
         obj = models.EnvironmentSensorsLog(
             temperature=validated_data["temperature"],
             humidity=validated_data["humidity"],
