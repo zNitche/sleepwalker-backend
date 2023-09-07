@@ -18,9 +18,9 @@ class BodySenorsView(APIView):
 
     def post(self, request, *args, **kwargs):
         session_uuid = self.kwargs["session_uuid"]
-        serializer = BodySensorsLogsSerializer(data=request.data, context={"session_uuid": session_uuid})
+        serializer = BodySensorsLogsSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(session_uuid=session_uuid)
 
             return Response(status=status.HTTP_201_CREATED)
 
