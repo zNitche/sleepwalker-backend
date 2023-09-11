@@ -1,0 +1,14 @@
+version: "3"
+services:
+  web_app:
+    container_name: sleepwalker_backend
+    command: /bin/sh -c "/sleepwalker/scripts/entrypoint.sh"
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+#    volumes:
+#      - ${DB_PATH}:/sleepwalker/database
+#      - ${LOGS_PATH}:/sleepwalker/logs
+    env_file:
+      - .env
