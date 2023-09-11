@@ -1,8 +1,14 @@
 from rest_framework import serializers
-from sleepwalker.apps.authenticate.models import AuthToken
+from sleepwalker.apps.authenticate import models
 
 
 class AuthTokenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AuthToken
+        model = models.AuthToken
         fields = ["token"]
+
+
+class UserApiKeySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = ["api_key"]

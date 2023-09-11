@@ -13,7 +13,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=datetime.datetime.utcnow)
 
-    private_storage_space = models.IntegerField(default=0, null=False)
+    api_key = models.CharField(max_length=16, unique=True, null=True, default=None)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
@@ -25,7 +25,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class AuthToken(models.Model):
-    token = models.CharField(max_length=128, unique=True, null=False, default=models_utils.generate_token)
+    token = models.CharField(max_length=256, unique=True, null=False, default=models_utils.generate_token)
     creation_date = models.DateTimeField(null=False, default=datetime.datetime.utcnow)
     expiration_date = models.DateTimeField(null=False, default=models_utils.get_token_expiration_date)
     blacklisted = models.BooleanField(null=False, default=False)

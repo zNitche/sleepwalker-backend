@@ -14,7 +14,7 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         ("Details", {
-            "fields": ("username", "password", "date_joined")
+            "fields": ("username", "password", "date_joined", "api_key")
         }),
         ("Permissions", {
             "fields": ("is_staff", "is_active")

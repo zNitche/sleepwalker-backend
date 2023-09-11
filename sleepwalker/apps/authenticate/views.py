@@ -4,7 +4,7 @@ from rest_framework import status
 from django.contrib.auth import authenticate
 from sleepwalker.apps.authenticate import serializers
 from sleepwalker.apps.authenticate import models
-from sleepwalker.apps.authenticate.token_auth import TokenAuth
+from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
 
 
 @api_view(["POST"])

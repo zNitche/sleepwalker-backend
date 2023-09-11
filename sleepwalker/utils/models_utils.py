@@ -4,8 +4,12 @@ import secrets
 import uuid
 
 
-def generate_token():
-    return secrets.token_hex(128)
+def generate_token(nbytes_length=128):
+    return secrets.token_hex(nbytes_length)
+
+
+def generate_api_key():
+    return generate_token(8)
 
 
 def get_token_expiration_date():
