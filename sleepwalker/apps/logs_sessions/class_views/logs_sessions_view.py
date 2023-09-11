@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from sleepwalker.apps.logs_sessions import models
-from sleepwalker.apps.authenticate.token_auth import TokenAuth
+from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
 from sleepwalker.apps.logs_sessions.paginators import LogsSessionsPagination
 from sleepwalker.apps.logs_sessions.serializers.logs_session_serializer import LogsSessionSerializer
 

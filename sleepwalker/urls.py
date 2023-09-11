@@ -14,12 +14,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("api/auth/", include("sleepwalker.apps.authenticate.urls")),
     path("api/", include("sleepwalker.apps.core.urls")),
-    path("api/sessions/", include("sleepwalker.apps.logs_sessions.urls")),
+    path("api/sessions/", include("sleepwalker.apps.logs_sessions.urls"))
 ]
+
+if settings.DEBUG:
+    from django.contrib import admin
+
+    urlpatterns.append(path("admin/", admin.site.urls))

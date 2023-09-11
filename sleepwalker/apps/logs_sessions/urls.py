@@ -7,12 +7,8 @@ from sleepwalker.apps.logs_sessions.class_views.logs_sessions_view import LogsSe
 app_name = "sessions"
 
 urlpatterns = [
-    path("", LogsSessionsView.as_view(),
-         name="logs_sessions"),
-    path("<str:session_uuid>/", LogsSessionView.as_view(),
-         name="logs_session"),
-    path("<str:session_uuid>/body-sensors/", BodySenorsLogsView.as_view(),
-         name="body_sensors_logs"),
-    path("<str:session_uuid>/environment-sensors/", EnvironmentSensorsLogsView.as_view(),
-         name="environment_sensors_logs"),
+    path("", LogsSessionsView.as_view(), name="logs_sessions"),
+    path("<str:session_uuid>/", LogsSessionView.as_view(), name="logs_session"),
+    path("<str:session_uuid>/body-sensors/", BodySenorsLogsView.as_view(), name="body_sensors_logs"),
+    path("<str:session_uuid>/environment-sensors/", EnvironmentSensorsLogsView.as_view(), name="environment_sensors_logs"),
 ]
