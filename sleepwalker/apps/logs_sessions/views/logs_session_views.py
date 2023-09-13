@@ -18,8 +18,8 @@ def logs_session(request, session_uuid):
     return Response(serializer.data)
 
 
-@api_view(["PUT"])
-@authentication_classes([ApiKeyAuth])
+@api_view(["POST"])
+@authentication_classes([ApiKeyAuth, TokenAuth])
 def close_logs_session(request, session_uuid):
     log_session = get_object_or_404(models.LogsSession, uuid=session_uuid)
     log_session.end_date = datetime.utcnow()

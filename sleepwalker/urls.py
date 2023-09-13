@@ -18,8 +18,8 @@ from django.urls import path, include
 from django.conf import settings
 
 urlpatterns = [
-    path("api/auth/", include("sleepwalker.apps.authenticate.urls")),
     path("api/", include("sleepwalker.apps.core.urls")),
+    path("api/auth/", include("sleepwalker.apps.authenticate.urls")),
     path("api/sessions/", include("sleepwalker.apps.logs_sessions.urls"))
 ]
 
