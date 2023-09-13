@@ -29,7 +29,7 @@ dotenv.load_dotenv(os.path.join(PROJECT_DIR, ".env"))
 SECRET_KEY = secrets.token_hex(32)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.getenv("DEBUG", 0))
+DEBUG = 0
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
 
@@ -40,26 +40,28 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
     'rest_framework',
     'sleepwalker.apps.authenticate',
     'sleepwalker.apps.core',
     'sleepwalker.apps.logs_sessions',
 ]
 
-if DEBUG:
-    INSTALLED_APPS.append('django.contrib.admin')
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.common.CommonMiddleware'
 ]
+
+if DEBUG:
+    INSTALLED_APPS.append('django.contrib.admin')
+    INSTALLED_APPS.append('django.contrib.staticfiles')
+    INSTALLED_APPS.append('django.contrib.messages')
+
+    MIDDLEWARE.append('django.middleware.csrf.CsrfViewMiddleware')
+    MIDDLEWARE.append('django.contrib.auth.middleware.AuthenticationMiddleware')
+    MIDDLEWARE.append('django.contrib.messages.middleware.MessageMiddleware')
+    MIDDLEWARE.append('django.middleware.clickjacking.XFrameOptionsMiddleware')
+
 
 ROOT_URLCONF = 'sleepwalker.urls'
 
