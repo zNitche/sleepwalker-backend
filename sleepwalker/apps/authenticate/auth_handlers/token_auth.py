@@ -4,6 +4,9 @@ from rest_framework import exceptions
 
 
 class TokenAuth(authentication.BaseAuthentication):
+    def authenticate_header(self, request):
+        return "Token"
+
     def authenticate(self, request):
         token = request.META.get("HTTP_X_AUTHORIZATION")
 

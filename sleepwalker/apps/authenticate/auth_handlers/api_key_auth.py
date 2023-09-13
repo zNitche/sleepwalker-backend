@@ -4,16 +4,22 @@ from rest_framework import exceptions
 
 
 class ApiKeyAuth(authentication.BaseAuthentication):
+    def authenticate_header(self, request):
+        return "Token"
+
     def authenticate(self, request):
-        api_key = request.META.get("HTTP_X_API_KEY")
+        token = request.META.get("HTTP_X_AUTHORIZATION")
 
-        try:
-            user = models.User.objects.filter(api_key=api_key).first()
+        if token is None:
+            api_key = request.META.get("HTTP_X_API_KEY")
 
-            if user:
-                return (user, None)
+            try:
+                user = models.User.objects.filter(api_key=api_key).first()
 
-        except Exception as e:
-            pass
+                if user:
+                    return (user, None)
 
-        raise exceptions.AuthenticationFailed("Invalid or missing api key")
+            except Exception as e:
+                pass
+
+            raise exceptions.AuthenticationFailed("Invalid or missing api key")
