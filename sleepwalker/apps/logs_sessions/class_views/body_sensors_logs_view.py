@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from sleepwalker.apps.logs_sessions import models
 from sleepwalker.apps.logs_sessions.serializers.body_sensors_logs_serializer import BodySensorsLogsSerializer
-from sleepwalker.apps.authenticate.token_auth import TokenAuth
+from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
 
 
 class BodySenorsLogsView(APIView):
