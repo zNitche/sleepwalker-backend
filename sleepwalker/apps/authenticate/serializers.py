@@ -3,6 +3,8 @@ from sleepwalker.apps.authenticate import models
 
 
 class AuthTokenSerializer(serializers.ModelSerializer):
+    token = serializers.CharField(source="key")
+
     class Meta:
         model = models.AuthToken
         fields = ["token"]

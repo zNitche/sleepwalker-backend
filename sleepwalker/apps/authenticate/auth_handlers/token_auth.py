@@ -11,7 +11,7 @@ class TokenAuth(authentication.BaseAuthentication):
         token = request.META.get("HTTP_X_AUTHORIZATION")
 
         try:
-            auth_token = models.AuthToken.objects.filter(token=token).first()
+            auth_token = models.AuthToken.objects.filter(key=token).first()
             if auth_token.is_valid():
                 user = auth_token.user
 
