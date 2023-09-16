@@ -5,7 +5,7 @@ from sleepwalker.apps.logs_sessions import models
 from sleepwalker.utils import models_utils
 
 
-class TestViews(APITestCase):
+class TestEnvironmentLogsViews(APITestCase):
     def setUp(self):
         self.username = "user"
         self.password = "1234"
