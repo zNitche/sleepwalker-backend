@@ -11,9 +11,9 @@ urlpatterns = [
     path("<str:session_uuid>/close/", logs_session_views.close_logs_session, name="close_logs_session"),
     path("<str:session_uuid>/remove/", logs_session_views.remove_logs_session, name="remove_logs_session"),
 
-    path("<str:session_uuid>/body-sensors/add", body_sensors_logs_views.create_body_sensors_log,
+    path("<str:session_uuid>/body-sensors/add/", body_sensors_logs_views.create_body_sensors_log,
          name="create_body_sensors_log"),
-    path("<str:session_uuid>/environment-sensors/add", environment_sensors_logs_views.create_environment_sensors_log,
+    path("<str:session_uuid>/environment-sensors/add/", environment_sensors_logs_views.create_environment_sensors_log,
          name="create_environment_sensors_log"),
 
     path("<str:session_uuid>/body-sensors/", body_sensors_logs_views.body_sensors_logs,
