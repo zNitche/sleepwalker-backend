@@ -20,9 +20,11 @@ def body_sensors_logs(request, session_uuid):
 @api_view(["POST"])
 @authentication_classes([ApiKeyAuth])
 def create_body_sensors_log(request, session_uuid):
+    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid)
     serializer = BodySensorsLogsSerializer(data=request.data)
+
     if serializer.is_valid():
-        serializer.save(session_uuid=session_uuid)
+        serializer.save(session_uuid=log_session.uuid)
 
         return Response(status=status.HTTP_201_CREATED)
 
