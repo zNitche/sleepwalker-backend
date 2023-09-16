@@ -23,7 +23,7 @@ def logs_sessions(request):
 @api_view(["POST"])
 @authentication_classes([ApiKeyAuth])
 def create_logs_session(request):
-    model = models.LogsSession(user=request.user)
-    model.save()
+    session = models.LogsSession.objects.create(user=request.user)
+    serializer = LogsSessionSerializer(session)
 
-    return Response(status=status.HTTP_201_CREATED)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)

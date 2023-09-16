@@ -15,7 +15,6 @@ class ApiKeyAuth(authentication.BaseAuthentication):
 
             try:
                 user = models.User.objects.filter(api_key=api_key).first()
-
                 if user:
                     return (user, None)
 
