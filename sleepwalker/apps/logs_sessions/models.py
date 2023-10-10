@@ -1,11 +1,11 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from sleepwalker.utils import models_utils
+from sleepwalker.utils import tokens_utils
 import datetime
 
 
 class LogsSession(models.Model):
-    uuid = models.CharField(max_length=32, unique=True, null=False, default=models_utils.generate_uuid)
+    uuid = models.CharField(max_length=32, unique=True, null=False, default=tokens_utils.generate_uuid)
 
     start_date = models.DateTimeField(null=False, default=datetime.datetime.utcnow)
     end_date = models.DateTimeField(null=True, default=None)
@@ -18,7 +18,7 @@ class LogsSession(models.Model):
 
 
 class BodySensorsLog(models.Model):
-    uuid = models.CharField(max_length=32, unique=True, null=False, default=models_utils.generate_uuid)
+    uuid = models.CharField(max_length=32, unique=True, null=False, default=tokens_utils.generate_uuid)
 
     heart_beat = models.FloatField(null=False, default=0)
     acceleration_x = models.FloatField(null=False, default=0)
@@ -35,7 +35,7 @@ class BodySensorsLog(models.Model):
 
 
 class EnvironmentSensorsLog(models.Model):
-    uuid = models.CharField(max_length=32, unique=True, null=False, default=models_utils.generate_uuid)
+    uuid = models.CharField(max_length=32, unique=True, null=False, default=tokens_utils.generate_uuid)
 
     temperature = models.FloatField(null=False, default=0)
     humidity = models.FloatField(null=False, default=0)

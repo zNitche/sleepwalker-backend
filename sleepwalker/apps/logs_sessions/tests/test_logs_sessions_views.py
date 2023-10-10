@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase, APIClient
 from django.contrib.auth import get_user_model
 from sleepwalker.apps.authenticate.models import AuthToken
 from sleepwalker.apps.logs_sessions import models
-from sleepwalker.utils import models_utils
+from sleepwalker.utils import tokens_utils
 
 
 class TestLogsSessionsViews(APITestCase):
@@ -12,7 +12,7 @@ class TestLogsSessionsViews(APITestCase):
 
         self.user = get_user_model().objects.create_user(username=self.username,
                                                          password=self.password,
-                                                         api_key=models_utils.generate_api_key())
+                                                         api_key=tokens_utils.generate_api_key())
         self.auth_token = AuthToken.objects.create(user=self.user)
 
         self.client = APIClient()
