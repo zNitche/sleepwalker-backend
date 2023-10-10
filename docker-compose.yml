@@ -5,13 +5,30 @@ services:
     command: /bin/sh -c "redis-server --port 6000"
     container_name: redis
     restart: unless-stopped
-  web_app:
+
+  backend:
+    depends_on:
+      - redis
     container_name: sleepwalker_backend
     command: /bin/sh -c "/sleepwalker/scripts/entrypoint.sh"
     build: .
     restart: unless-stopped
     ports:
       - "8000:8000"
+    volumes:
+      - ${DB_PATH}:/sleepwalker/database
+      - ${LOGS_PATH}:/sleepwalker/logs
+    env_file:
+      - .env
+
+  celery_worker:
+    depends_on:
+      - redis
+      - backend
+    command: /bin/sh -c "/sleepwalker/scripts/celery_entrypoint.sh"
+    container_name: sleepwalker_celery_worker
+    build: .
+    restart: unless-stopped
     volumes:
       - ${DB_PATH}:/sleepwalker/database
       - ${LOGS_PATH}:/sleepwalker/logs

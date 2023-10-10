@@ -1,0 +1,1 @@
+celery -A sleepwalker worker -l INFO

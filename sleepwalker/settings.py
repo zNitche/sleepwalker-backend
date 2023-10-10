@@ -29,7 +29,7 @@ dotenv.load_dotenv(os.path.join(PROJECT_DIR, ".env"))
 SECRET_KEY = secrets.token_hex(32)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", 0)
+DEBUG = int(os.getenv("DEBUG", 0))
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
 
@@ -64,8 +64,14 @@ if DEBUG:
 
     REDIS_HOST_NAME = "127.0.0.1"
 
+    CELERY_BROKER_URL = "redis://127.0.0.1:6000/2"
+    CELERY_RESULT_BACKEND = "redis://127.0.0.1:6000/2"
+
 else:
     REDIS_HOST_NAME = "redis"
+
+    CELERY_BROKER_URL = "redis://redis:6000/2"
+    CELERY_RESULT_BACKEND = "redis://redis:6000/2"
 
 
 ROOT_URLCONF = 'sleepwalker.urls'
@@ -167,7 +173,13 @@ LOGGING = {
             "class": "logging.FileHandler",
             "formatter": "verbose",
             "filename": os.path.join(PROJECT_DIR, "logs", "log.log"),
-        }
+        },
+        "celery_file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "formatter": "simple",
+            "filename": os.path.join(PROJECT_DIR, "logs", "celery_log.log"),
+        },
     },
     "loggers": {
         "main": {
@@ -178,11 +190,17 @@ LOGGING = {
             "handlers": ["console"],
             "propagate": True,
             "level": "DEBUG",
-        }
+        },
+        "celery_logger": {
+            "handlers": ["celery_file"],
+            "propagate": False,
+            "level": "INFO",
+        },
     },
 }
 
 LOGGER_NAME = "dev" if DEBUG else "main"
+CELERY_LOGGER_NAME = "celery_logger"
 
 AUTH_USER_MODEL = "authenticate.User"
 
