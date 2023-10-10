@@ -12,7 +12,7 @@ class TokenAuth(authentication.BaseAuthentication):
 
         try:
             auth_token = models.AuthToken.objects.filter(key=token).first()
-            if auth_token.is_valid():
+            if auth_token and auth_token.is_valid():
                 user = auth_token.user
 
                 if user:

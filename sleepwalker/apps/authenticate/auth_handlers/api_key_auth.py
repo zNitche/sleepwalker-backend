@@ -9,16 +9,16 @@ class ApiKeyAuth(authentication.BaseAuthentication):
 
     def authenticate(self, request):
         token = request.META.get("HTTP_X_AUTHORIZATION")
+        api_key = request.META.get("HTTP_X_API_KEY")
 
         if token is None:
-            api_key = request.META.get("HTTP_X_API_KEY")
+            if api_key is not None:
+                try:
+                    user = models.User.objects.filter(api_key=api_key).first()
+                    if user:
+                        return (user, None)
 
-            try:
-                user = models.User.objects.filter(api_key=api_key).first()
-                if user:
-                    return (user, None)
-
-            except Exception as e:
-                pass
+                except Exception as e:
+                    pass
 
             raise exceptions.AuthenticationFailed("Invalid or missing api key")
