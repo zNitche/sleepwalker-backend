@@ -62,6 +62,11 @@ if DEBUG:
     MIDDLEWARE.append('django.contrib.messages.middleware.MessageMiddleware')
     MIDDLEWARE.append('django.middleware.clickjacking.XFrameOptionsMiddleware')
 
+    REDIS_HOST_NAME = "127.0.0.1"
+
+else:
+    REDIS_HOST_NAME = "redis"
+
 
 ROOT_URLCONF = 'sleepwalker.urls'
 
@@ -99,6 +104,15 @@ DATABASES = {
         'NAME': os.path.join(PROJECT_DIR, "database", "app.sqlite3"),
     }
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST_NAME}:6000/1",
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
