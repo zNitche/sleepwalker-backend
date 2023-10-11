@@ -1,8 +1,9 @@
-from rest_framework.test import APITestCase, APIClient
+from rest_framework.test import APITestCase, APIClient, override_settings
 from django.contrib.auth import get_user_model
 from sleepwalker.apps.authenticate import models
 
 
+@override_settings(TESTING=True)
 class TestViews(APITestCase):
     def setUp(self):
         self.username = "user"

@@ -1,10 +1,11 @@
-from rest_framework.test import APITestCase, APIClient
+from rest_framework.test import APITestCase, APIClient, override_settings
 from django.contrib.auth import get_user_model
 from sleepwalker.apps.authenticate.models import AuthToken
 from sleepwalker.apps.logs_sessions import models
 from sleepwalker.utils import tokens_utils
 
 
+@override_settings(TESTING=True)
 class TestBodyLogsViews(APITestCase):
     def setUp(self):
         self.username = "user"
