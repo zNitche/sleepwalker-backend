@@ -22,5 +22,4 @@ app.autodiscover_tasks()
 @worker_ready.connect
 def at_start(sender, **k):
     with sender.app.connection() as conn:
-         sender.app.send_task("sleepwalker.apps.core.task.sleepwalking_detection_process.SleepwalkingDetectionProcess",
-                              connection=conn)
+        pass
