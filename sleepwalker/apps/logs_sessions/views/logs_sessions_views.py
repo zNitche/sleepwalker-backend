@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework import status
-from sleepwalker.apps.authenticate.auth_handlers.api_key_auth_standalone import ApiKeyAuthStandalone
+from sleepwalker.apps.authenticate.auth_handlers.api_key_auth import ApiKeyAuth
 from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
 from sleepwalker.apps.logs_sessions import models
 from sleepwalker.apps.logs_sessions.paginators import LogsSessionsPagination
@@ -22,7 +22,7 @@ def logs_sessions(request):
 
 
 @api_view(["POST"])
-@authentication_classes([ApiKeyAuthStandalone])
+@authentication_classes([ApiKeyAuth])
 def create_logs_session(request):
     if not models_utils.check_if_user_has_unfinished_session(request.user.id):
         session = models.LogsSession.objects.create(user=request.user)

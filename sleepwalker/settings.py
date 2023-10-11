@@ -204,17 +204,11 @@ CELERY_LOGGER_NAME = "celery_logger"
 
 AUTH_USER_MODEL = "authenticate.User"
 
-DEFAULT_RENDERER_CLASSES = (
-    "rest_framework.renderers.JSONRenderer",
-)
-
-if DEBUG:
-    DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
-        "rest_framework.renderers.BrowsableAPIRenderer",
-    )
-
 REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": DEFAULT_RENDERER_CLASSES
+    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ]
 }
 
 API_AUTH_TOKEN_LIFESPAN = datetime.timedelta(days=7)
