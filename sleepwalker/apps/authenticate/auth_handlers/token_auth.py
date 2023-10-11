@@ -10,15 +10,12 @@ class TokenAuth(authentication.BaseAuthentication):
     def authenticate(self, request):
         token = request.META.get("HTTP_X_AUTHORIZATION")
 
-        try:
+        if token:
             auth_token = models.AuthToken.objects.filter(key=token).first()
             if auth_token and auth_token.is_valid():
                 user = auth_token.user
 
                 if user:
                     return (user, auth_token)
-
-        except Exception as e:
-            pass
 
         raise exceptions.AuthenticationFailed("Invalid or missing auth token")
