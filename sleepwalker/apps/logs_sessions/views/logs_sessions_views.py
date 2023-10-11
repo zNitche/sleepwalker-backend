@@ -6,7 +6,8 @@ from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
 from sleepwalker.apps.logs_sessions import models
 from sleepwalker.apps.logs_sessions.paginators import LogsSessionsPagination
 from sleepwalker.apps.logs_sessions.serializers.logs_session_serializer import LogsSessionSerializer
-from sleepwalker.utils import models_utils
+from sleepwalker.utils import models_utils, tasks_utils
+from sleepwalker.apps.core import tasks as celery_tasks
 
 
 @api_view(["GET"])
@@ -27,6 +28,8 @@ def create_logs_session(request):
     if not models_utils.check_if_user_has_unfinished_session(request.user.id):
         session = models.LogsSession.objects.create(user=request.user)
         serializer = LogsSessionSerializer(session)
+
+        tasks_utils.run_task(celery_tasks.SleepwalkingDetectionProcess, (request.user.id, session.uuid))
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

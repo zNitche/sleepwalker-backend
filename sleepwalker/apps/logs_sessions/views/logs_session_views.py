@@ -7,6 +7,7 @@ from sleepwalker.apps.authenticate.auth_handlers.api_key_auth import ApiKeyAuth
 from sleepwalker.apps.logs_sessions import models
 from sleepwalker.apps.logs_sessions.serializers.logs_session_serializer import LogsSessionSerializer
 from datetime import datetime
+from sleepwalker.utils import tasks_utils
 
 
 @api_view(["GET"])
@@ -24,6 +25,8 @@ def close_logs_session(request, session_uuid):
     log_session = get_object_or_404(models.LogsSession, uuid=session_uuid)
     log_session.end_date = datetime.utcnow()
     log_session.save()
+
+    tasks_utils.stop_task(request.user.id, session_uuid, "SleepwalkingDetectionProcess")
 
     return Response(status=status.HTTP_200_OK)
 
