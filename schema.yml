@@ -1,0 +1,272 @@
+openapi: 3.0.3
+info:
+  title: Sleepwalker API
+  version: 1.0.0
+paths:
+  /api/auth-check/:
+    get:
+      operationId: auth_check_retrieve
+      tags:
+      - auth-check
+      security:
+      - ApiKeyAuth: []
+      - TokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/auth/api-key/:
+    get:
+      operationId: auth_get_api_key
+      description: Get API Key
+      tags:
+      - auth
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserApiKey'
+          description: ''
+        '401':
+          description: No response body
+    post:
+      operationId: auth_create_api_key
+      description: Create API Key
+      tags:
+      - auth
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserApiKey'
+          description: ''
+        '401':
+          description: No response body
+  /api/auth/login/:
+    post:
+      operationId: auth_login
+      description: Login
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+  /api/auth/logout/:
+    post:
+      operationId: auth_logout
+      description: Logout
+      tags:
+      - auth
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          description: No response body
+        '401':
+          description: No response body
+  /api/health-check/:
+    get:
+      operationId: health_check_retrieve
+      tags:
+      - health-check
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/sessions/:
+    get:
+      operationId: sessions_retrieve
+      tags:
+      - sessions
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/sessions/{session_uuid}/:
+    get:
+      operationId: sessions_retrieve_2
+      parameters:
+      - in: path
+        name: session_uuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - sessions
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/sessions/{session_uuid}/body-sensors/:
+    get:
+      operationId: sessions_body_sensors_retrieve
+      parameters:
+      - in: path
+        name: session_uuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - sessions
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/sessions/{session_uuid}/body-sensors/add/:
+    post:
+      operationId: sessions_body_sensors_add_create
+      parameters:
+      - in: path
+        name: session_uuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - sessions
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/sessions/{session_uuid}/close/:
+    post:
+      operationId: sessions_close_create
+      parameters:
+      - in: path
+        name: session_uuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - sessions
+      security:
+      - ApiKeyAuth: []
+      - TokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/sessions/{session_uuid}/environment-sensors/:
+    get:
+      operationId: sessions_environment_sensors_retrieve
+      parameters:
+      - in: path
+        name: session_uuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - sessions
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/sessions/{session_uuid}/environment-sensors/add/:
+    post:
+      operationId: sessions_environment_sensors_add_create
+      parameters:
+      - in: path
+        name: session_uuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - sessions
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/sessions/{session_uuid}/remove/:
+    delete:
+      operationId: sessions_remove_destroy
+      parameters:
+      - in: path
+        name: session_uuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - sessions
+      security:
+      - TokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/sessions/init/:
+    post:
+      operationId: sessions_init_create
+      tags:
+      - sessions
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: No response body
+components:
+  schemas:
+    AuthToken:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+      - token
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - password
+      - username
+    UserApiKey:
+      type: object
+      properties:
+        api_key:
+          type: string
+          nullable: true
+          maxLength: 16
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: API-KEY
+      description: api key
+    TokenAuth:
+      type: apiKey
+      in: header
+      name: AUTH-TOKEN
+      description: Auth Token obtained from login process
+servers:
+- url: http://127.0.0.1:8000/
+  description: dev

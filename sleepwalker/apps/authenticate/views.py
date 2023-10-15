@@ -3,13 +3,13 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework import status, permissions
 from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema
-from sleepwalker.api_docs.apps import authenticate_schema
+from sleepwalker.api_docs.apps import authenticate_schema as docs_schema
 from sleepwalker.apps.authenticate import serializers
 from sleepwalker.apps.authenticate import models
 from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
 
 
-@extend_schema(**authenticate_schema.login)
+@extend_schema(**docs_schema.login)
 @api_view(["POST"])
 @permission_classes([permissions.AllowAny])
 def login(request):
@@ -27,6 +27,7 @@ def login(request):
     return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
+@extend_schema(**docs_schema.logout)
 @api_view(["POST"])
 @authentication_classes([TokenAuth])
 def logout(request):
