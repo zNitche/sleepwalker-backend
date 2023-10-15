@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'rest_framework',
-    'drf_spectacular',
     'sleepwalker.apps.authenticate',
     'sleepwalker.apps.core',
     'sleepwalker.apps.logs_sessions',
@@ -58,6 +57,7 @@ if DEBUG:
     INSTALLED_APPS.append('django.contrib.admin')
     INSTALLED_APPS.append('django.contrib.staticfiles')
     INSTALLED_APPS.append('django.contrib.messages')
+    INSTALLED_APPS.append('drf_spectacular')
 
     MIDDLEWARE.append('django.middleware.csrf.CsrfViewMiddleware')
     MIDDLEWARE.append('django.contrib.auth.middleware.AuthenticationMiddleware')
@@ -207,11 +207,12 @@ CELERY_LOGGER_NAME = "celery_logger"
 AUTH_USER_MODEL = "authenticate.User"
 
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema" if DEBUG else None,
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-    ]
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": []
 }
 
 SPECTACULAR_SETTINGS = {
