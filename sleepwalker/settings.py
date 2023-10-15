@@ -59,7 +59,6 @@ if DEBUG:
     INSTALLED_APPS.append('django.contrib.messages')
     INSTALLED_APPS.append('drf_spectacular')
 
-    MIDDLEWARE.append('django.middleware.csrf.CsrfViewMiddleware')
     MIDDLEWARE.append('django.contrib.auth.middleware.AuthenticationMiddleware')
     MIDDLEWARE.append('django.contrib.messages.middleware.MessageMiddleware')
     MIDDLEWARE.append('django.middleware.clickjacking.XFrameOptionsMiddleware')
@@ -219,8 +218,11 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Sleepwalker API",
     "DESCRIPTION": "",
     "VERSION": "1.0.0",
+    "SERVERS": [
+        {"url": "http://127.0.0.1:8000/", "description": "dev"}
+    ],
     "SERVE_INCLUDE_SCHEMA": False,
-    "DISABLE_ERRORS_AND_WARNINGS": True,
+    "DISABLE_ERRORS_AND_WARNINGS": True
 }
 
 API_AUTH_TOKEN_LIFESPAN = datetime.timedelta(days=7)
