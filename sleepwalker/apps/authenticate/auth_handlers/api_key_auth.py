@@ -8,8 +8,8 @@ class ApiKeyAuth(authentication.BaseAuthentication):
         return "Token"
 
     def authenticate(self, request):
-        token = request.META.get("HTTP_X_AUTHORIZATION")
-        api_key = request.META.get("HTTP_X_API_KEY")
+        token = request.META.get("HTTP_AUTH_TOKEN")
+        api_key = request.META.get("HTTP_API_KEY")
 
         if token is None and api_key is None:
             raise exceptions.AuthenticationFailed("Invalid or missing api key / auth token")

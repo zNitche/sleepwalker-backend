@@ -20,7 +20,7 @@ class TestViews(APITestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_auth_check_as_auth(self):
-        self.client.credentials(HTTP_X_AUTHORIZATION=self.auth_token.key)
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
         response = self.client.get("/api/auth-check/")
 
         self.assertEquals(response.status_code, 200)

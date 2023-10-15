@@ -23,13 +23,13 @@ class TestLogsSessionViews(APITestCase):
         self.assertEquals(response.status_code, 401)
 
     def test_logs_session_not_found(self):
-        self.client.credentials(HTTP_X_AUTHORIZATION=self.auth_token.key)
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
         response = self.client.get("/api/sessions/123/")
 
         self.assertEquals(response.status_code, 404)
 
     def test_logs_session(self):
-        self.client.credentials(HTTP_X_AUTHORIZATION=self.auth_token.key)
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
         session = models.LogsSession.objects.create(user=self.user)
         response = self.client.get(f"/api/sessions/{session.uuid}/")
 
@@ -41,7 +41,7 @@ class TestLogsSessionViews(APITestCase):
         self.assertEquals(response.status_code, 401)
 
     def test_close_logs_session(self):
-        self.client.credentials(HTTP_X_AUTHORIZATION=self.auth_token.key)
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
         session = models.LogsSession.objects.create(user=self.user)
         response = self.client.post(f"/api/sessions/{session.uuid}/close/")
 
@@ -54,7 +54,7 @@ class TestLogsSessionViews(APITestCase):
         self.assertEquals(response.status_code, 401)
 
     def test_remove_logs_session(self):
-        self.client.credentials(HTTP_X_AUTHORIZATION=self.auth_token.key)
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
         session = models.LogsSession.objects.create(user=self.user)
         response = self.client.delete(f"/api/sessions/{session.uuid}/remove/")
 

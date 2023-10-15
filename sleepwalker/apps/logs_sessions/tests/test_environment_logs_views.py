@@ -23,12 +23,12 @@ class TestEnvironmentLogsViews(APITestCase):
         self.assertEquals(response.status_code, 401)
 
     def test_environment_sensors_logs_not_found(self):
-        self.client.credentials(HTTP_X_AUTHORIZATION=self.auth_token.key)
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
         response = self.client.get("/api/sessions/123/environment-sensors/")
         self.assertEquals(response.status_code, 404)
 
     def test_environment_sensors_logs(self):
-        self.client.credentials(HTTP_X_AUTHORIZATION=self.auth_token.key)
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
         session = models.LogsSession.objects.create(user=self.user)
         response = self.client.get(f"/api/sessions/{session.uuid}/environment-sensors/")
 
@@ -40,12 +40,12 @@ class TestEnvironmentLogsViews(APITestCase):
         self.assertEquals(response.status_code, 401)
 
     def test_add_environment_sensors_logs_not_found(self):
-        self.client.credentials(HTTP_X_API_KEY=self.user.api_key)
+        self.client.credentials(HTTP_API_KEY=self.user.api_key)
         response = self.client.post("/api/sessions/123/environment-sensors/add/")
         self.assertEquals(response.status_code, 404)
 
     def test_add_environment_sensors_logs(self):
-        self.client.credentials(HTTP_X_API_KEY=self.user.api_key)
+        self.client.credentials(HTTP_API_KEY=self.user.api_key)
         session = models.LogsSession.objects.create(user=self.user)
 
         log = {

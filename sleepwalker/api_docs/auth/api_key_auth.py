@@ -10,6 +10,6 @@ class ApiKeyAuthSchema(OpenApiAuthenticationExtension):
         return {
             "type": "apiKey",
             "in": "header",
-            "name": "api-key",
+            "name": "API-KEY",
             "description": "api key"
         }

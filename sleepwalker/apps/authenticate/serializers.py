@@ -2,6 +2,14 @@ from rest_framework import serializers
 from sleepwalker.apps.authenticate import models
 
 
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    class Meta:
+        fields = ["username", "password"]
+
+
 class AuthTokenSerializer(serializers.ModelSerializer):
     token = serializers.CharField(source="key")
 

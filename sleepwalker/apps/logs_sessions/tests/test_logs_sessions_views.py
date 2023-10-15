@@ -23,7 +23,7 @@ class TestLogsSessionsViews(APITestCase):
         self.assertEquals(response.status_code, 401)
 
     def test_logs_sessions(self):
-        self.client.credentials(HTTP_X_AUTHORIZATION=self.auth_token.key)
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
         response = self.client.get(f"/api/sessions/")
 
         self.assertEquals(response.status_code, 200)
@@ -34,7 +34,7 @@ class TestLogsSessionsViews(APITestCase):
         self.assertEquals(response.status_code, 401)
 
     def test_init_logs_session(self):
-        self.client.credentials(HTTP_X_API_KEY=self.user.api_key)
+        self.client.credentials(HTTP_API_KEY=self.user.api_key)
         response = self.client.post(f"/api/sessions/init/")
         session_uuid = response.json().get("uuid")
 

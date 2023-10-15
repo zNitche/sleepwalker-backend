@@ -10,6 +10,6 @@ class TokenAuthSchema(OpenApiAuthenticationExtension):
         return {
             "type": "apiKey",
             "in": "header",
-            "name": "Authorization",
+            "name": "AUTH-TOKEN",
             "description": "Auth Token obtained from login process"
         }

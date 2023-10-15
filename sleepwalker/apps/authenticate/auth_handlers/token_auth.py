@@ -8,7 +8,7 @@ class TokenAuth(authentication.BaseAuthentication):
         return "Token"
 
     def authenticate(self, request):
-        token = request.META.get("HTTP_X_AUTHORIZATION")
+        token = request.META.get("HTTP_AUTH_TOKEN")
 
         if token:
             auth_token = models.AuthToken.objects.filter(key=token).first()

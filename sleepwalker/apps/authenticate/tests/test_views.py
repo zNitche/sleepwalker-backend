@@ -24,7 +24,7 @@ class TestViews(APITestCase):
         self.assertIsNot(response.json().get("token"), None)
 
     def test_logout_auth(self):
-        self.client.credentials(HTTP_X_AUTHORIZATION=self.auth_token.key)
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
         response = self.client.post("/api/auth/logout/")
 
         self.assertEquals(response.status_code, 200)
@@ -37,7 +37,7 @@ class TestViews(APITestCase):
         self.assertEquals(response.status_code, 401)
 
     def test_api_key_creation_auth(self):
-        self.client.credentials(HTTP_X_AUTHORIZATION=self.auth_token.key)
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
 
         self.assertIs(self.user.api_key, None)
         response = self.client.post("/api/auth/api-key/")
