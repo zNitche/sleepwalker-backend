@@ -25,5 +25,9 @@ urlpatterns = [
 
 if settings.DEBUG:
     from django.contrib import admin
+    from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
 
     urlpatterns.append(path("admin/", admin.site.urls))
+
+    urlpatterns.append(path("api/docs/schema/", SpectacularAPIView.as_view(), name="schema"))
+    urlpatterns.append(path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"))

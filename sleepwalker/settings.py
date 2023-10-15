@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'rest_framework',
+    'drf_spectacular',
     'sleepwalker.apps.authenticate',
     'sleepwalker.apps.core',
     'sleepwalker.apps.logs_sessions',
@@ -206,10 +207,19 @@ CELERY_LOGGER_NAME = "celery_logger"
 AUTH_USER_MODEL = "authenticate.User"
 
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ]
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Sleepwalker API",
+    "DESCRIPTION": "",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "DISABLE_ERRORS_AND_WARNINGS": True,
 }
 
 API_AUTH_TOKEN_LIFESPAN = datetime.timedelta(days=7)
