@@ -103,17 +103,27 @@ paths:
           description: No response body
   /api/sessions/:
     get:
-      operationId: sessions_retrieve
+      operationId: get_logs_sessions
+      description: Get logs sessions
       tags:
-      - sessions
+      - logs_sessions
       security:
       - TokenAuth: []
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LogsSession'
+          description: ''
+        '401':
           description: No response body
   /api/sessions/{session_uuid}/:
     get:
-      operationId: sessions_retrieve_2
+      operationId: get_logs_session
+      description: get logs session by id
       parameters:
       - in: path
         name: session_uuid
@@ -121,15 +131,24 @@ paths:
           type: string
         required: true
       tags:
-      - sessions
+      - logs_sessions
       security:
       - TokenAuth: []
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsSession'
+          description: ''
+        '401':
+          description: No response body
+        '404':
           description: No response body
   /api/sessions/{session_uuid}/body-sensors/:
     get:
-      operationId: sessions_body_sensors_retrieve
+      operationId: body_sensors_logs
+      description: get body sensor logs for session
       parameters:
       - in: path
         name: session_uuid
@@ -137,15 +156,26 @@ paths:
           type: string
         required: true
       tags:
-      - sessions
+      - body_sensors_logs
       security:
       - TokenAuth: []
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BodySensorsLogs'
+          description: ''
+        '401':
+          description: No response body
+        '404':
           description: No response body
   /api/sessions/{session_uuid}/body-sensors/add/:
     post:
-      operationId: sessions_body_sensors_add_create
+      operationId: create_body_sensors_log
+      description: create body sensor logs for session
       parameters:
       - in: path
         name: session_uuid
@@ -153,15 +183,35 @@ paths:
           type: string
         required: true
       tags:
-      - sessions
+      - body_sensors_logs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodySensorsLogs'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BodySensorsLogs'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BodySensorsLogs'
       security:
       - ApiKeyAuth: []
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BodySensorsLogs'
+          description: ''
+        '401':
+          description: No response body
+        '404':
           description: No response body
   /api/sessions/{session_uuid}/close/:
     post:
-      operationId: sessions_close_create
+      operationId: close_logs_session
+      description: close logs session by id
       parameters:
       - in: path
         name: session_uuid
@@ -169,16 +219,21 @@ paths:
           type: string
         required: true
       tags:
-      - sessions
+      - logs_sessions
       security:
       - ApiKeyAuth: []
       - TokenAuth: []
       responses:
         '200':
+          description: No response body
+        '401':
+          description: No response body
+        '404':
           description: No response body
   /api/sessions/{session_uuid}/environment-sensors/:
     get:
-      operationId: sessions_environment_sensors_retrieve
+      operationId: environment_sensors_logs
+      description: get environment sensor logs for session
       parameters:
       - in: path
         name: session_uuid
@@ -186,15 +241,26 @@ paths:
           type: string
         required: true
       tags:
-      - sessions
+      - environment_sensors_logs
       security:
       - TokenAuth: []
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EnvironmentSensorsLogs'
+          description: ''
+        '401':
+          description: No response body
+        '404':
           description: No response body
   /api/sessions/{session_uuid}/environment-sensors/add/:
     post:
-      operationId: sessions_environment_sensors_add_create
+      operationId: create_environment_sensors_log
+      description: create environment sensor logs for session
       parameters:
       - in: path
         name: session_uuid
@@ -202,15 +268,35 @@ paths:
           type: string
         required: true
       tags:
-      - sessions
+      - environment_sensors_logs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentSensorsLogs'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EnvironmentSensorsLogs'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EnvironmentSensorsLogs'
       security:
       - ApiKeyAuth: []
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentSensorsLogs'
+          description: ''
+        '401':
+          description: No response body
+        '404':
           description: No response body
   /api/sessions/{session_uuid}/remove/:
     delete:
-      operationId: sessions_remove_destroy
+      operationId: delete_logs_session
+      description: delete logs session by id
       parameters:
       - in: path
         name: session_uuid
@@ -218,22 +304,33 @@ paths:
           type: string
         required: true
       tags:
-      - sessions
+      - logs_sessions
       security:
       - TokenAuth: []
       responses:
-        '204':
+        '200':
+          description: No response body
+        '401':
+          description: No response body
+        '404':
           description: No response body
   /api/sessions/init/:
     post:
-      operationId: sessions_init_create
+      operationId: create_logs_session
+      description: Create logs sessions
       tags:
-      - sessions
+      - logs_sessions
       security:
       - ApiKeyAuth: []
       responses:
         '200':
           description: No response body
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsSession'
+          description: ''
 components:
   schemas:
     AuthToken:
@@ -243,6 +340,50 @@ components:
           type: string
       required:
       - token
+    BodySensorsLogs:
+      type: object
+      properties:
+        uuid:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date-time
+          readOnly: true
+        heart_beat:
+          type: number
+          format: double
+        acceleration_x:
+          type: number
+          format: double
+        acceleration_y:
+          type: number
+          format: double
+        acceleration_z:
+          type: number
+          format: double
+      required:
+      - date
+      - uuid
+    EnvironmentSensorsLogs:
+      type: object
+      properties:
+        uuid:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date-time
+          readOnly: true
+        temperature:
+          type: number
+          format: double
+        humidity:
+          type: number
+          format: double
+      required:
+      - date
+      - uuid
     Login:
       type: object
       properties:
@@ -253,6 +394,25 @@ components:
       required:
       - password
       - username
+    LogsSession:
+      type: object
+      properties:
+        uuid:
+          type: string
+          readOnly: true
+        start_date:
+          type: string
+          format: date-time
+          readOnly: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - end_date
+      - start_date
+      - uuid
     UserApiKey:
       type: object
       properties:
@@ -277,3 +437,6 @@ servers:
 tags:
 - auth
 - core
+- logs_sessions
+- body_sensors_logs
+- environment_sensors_logs

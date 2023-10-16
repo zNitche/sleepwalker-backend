@@ -1,6 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework import status
+from drf_spectacular.utils import extend_schema
+from sleepwalker.api_docs.apps import logs_sessions_schema as docs_schema
 from sleepwalker.apps.authenticate.auth_handlers.api_key_auth import ApiKeyAuth
 from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
 from sleepwalker.apps.logs_sessions import models
@@ -10,6 +12,7 @@ from sleepwalker.utils import models_utils, tasks_utils
 from sleepwalker.apps.core import tasks as celery_tasks
 
 
+@extend_schema(**docs_schema.logs_sessions)
 @api_view(["GET"])
 @authentication_classes([TokenAuth])
 def logs_sessions(request):
@@ -22,6 +25,7 @@ def logs_sessions(request):
     return paginator.get_paginated_response(serializer.data)
 
 
+@extend_schema(**docs_schema.create_logs_session)
 @api_view(["POST"])
 @authentication_classes([ApiKeyAuth])
 def create_logs_session(request):

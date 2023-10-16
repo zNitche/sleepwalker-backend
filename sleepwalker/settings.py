@@ -223,7 +223,7 @@ SPECTACULAR_SETTINGS = {
     ],
     "SERVE_INCLUDE_SCHEMA": False,
     "DISABLE_ERRORS_AND_WARNINGS": True,
-    "TAGS": ["auth", "core"]
+    "TAGS": ["auth", "core", "logs_sessions", "body_sensors_logs", "environment_sensors_logs"]
 }
 
 API_AUTH_TOKEN_LIFESPAN = datetime.timedelta(days=7)
