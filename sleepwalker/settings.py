@@ -222,7 +222,8 @@ SPECTACULAR_SETTINGS = {
         {"url": "http://127.0.0.1:8000/", "description": "dev"}
     ],
     "SERVE_INCLUDE_SCHEMA": False,
-    "DISABLE_ERRORS_AND_WARNINGS": True
+    "DISABLE_ERRORS_AND_WARNINGS": True,
+    "TAGS": ["auth", "core"]
 }
 
 API_AUTH_TOKEN_LIFESPAN = datetime.timedelta(days=7)

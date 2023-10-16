@@ -5,14 +5,17 @@ info:
 paths:
   /api/auth-check/:
     get:
-      operationId: auth_check_retrieve
+      operationId: auth_check
+      description: Auth check
       tags:
-      - auth-check
+      - core
       security:
       - ApiKeyAuth: []
       - TokenAuth: []
       responses:
         '200':
+          description: No response body
+        '401':
           description: No response body
   /api/auth/api-key/:
     get:
@@ -89,9 +92,10 @@ paths:
           description: No response body
   /api/health-check/:
     get:
-      operationId: health_check_retrieve
+      operationId: health_check
+      description: Health check
       tags:
-      - health-check
+      - core
       security:
       - {}
       responses:
@@ -270,3 +274,6 @@ components:
 servers:
 - url: http://127.0.0.1:8000/
   description: dev
+tags:
+- auth
+- core
