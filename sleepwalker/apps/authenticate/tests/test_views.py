@@ -1,5 +1,6 @@
 from rest_framework.test import APITestCase, APIClient, override_settings
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from sleepwalker.apps.authenticate import models
 
 
@@ -15,7 +16,7 @@ class TestViews(APITestCase):
         self.client = APIClient()
 
     def test_login(self):
-        response = self.client.post("/api/auth/login/", {
+        response = self.client.post(reverse("authenticate:login"), {
             "username": self.username,
             "password": self.password
         })
@@ -25,7 +26,7 @@ class TestViews(APITestCase):
 
     def test_logout_auth(self):
         self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
-        response = self.client.post("/api/auth/logout/")
+        response = self.client.post(reverse("authenticate:logout"))
 
         self.assertEquals(response.status_code, 200)
 
@@ -33,14 +34,14 @@ class TestViews(APITestCase):
         self.assertFalse(auth_token.is_valid())
 
     def test_logout_not_auth(self):
-        response = self.client.post("/api/auth/logout/")
+        response = self.client.post(reverse("authenticate:logout"))
         self.assertEquals(response.status_code, 401)
 
     def test_api_key_creation_auth(self):
         self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
 
         self.assertIs(self.user.api_key, None)
-        response = self.client.post("/api/auth/api-key/")
+        response = self.client.post(reverse("authenticate:api_key"))
 
         user = get_user_model().objects.filter(username=self.username).first()
 
@@ -49,5 +50,5 @@ class TestViews(APITestCase):
         self.assertIsNot(response.json().get("api_key"), None)
 
     def test_api_key_creation_not_auth(self):
-        response = self.client.post("/api/auth/api-key/")
+        response = self.client.post(reverse("authenticate:api_key"))
         self.assertEquals(response.status_code, 401)

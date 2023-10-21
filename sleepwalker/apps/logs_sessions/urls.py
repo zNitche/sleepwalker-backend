@@ -2,7 +2,7 @@ from django.urls import path
 from sleepwalker.apps.logs_sessions.views import (logs_sessions_views, logs_session_views,
                                                   body_sensors_logs_views, environment_sensors_logs_views)
 
-app_name = "sessions"
+app_name = "logs_sessions"
 
 urlpatterns = [
     path("", logs_sessions_views.logs_sessions, name="logs_sessions"),

@@ -1,5 +1,6 @@
 from rest_framework.test import APITestCase, APIClient, override_settings
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from sleepwalker.apps.authenticate.models import AuthToken
 from sleepwalker.apps.logs_sessions import models
 from sleepwalker.utils import tokens_utils
@@ -19,23 +20,23 @@ class TestLogsSessionsViews(APITestCase):
         self.client = APIClient()
 
     def test_logs_sessions_not_auth(self):
-        response = self.client.get("/api/sessions/")
+        response = self.client.get(reverse("logs_sessions:logs_sessions"))
         self.assertEquals(response.status_code, 401)
 
     def test_logs_sessions(self):
         self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
-        response = self.client.get(f"/api/sessions/")
+        response = self.client.get(reverse("logs_sessions:logs_sessions"))
 
         self.assertEquals(response.status_code, 200)
         self.assertEquals(len(response.json().get("data")), 0)
 
     def test_init_logs_session_not_auth(self):
-        response = self.client.post("/api/sessions/init/")
+        response = self.client.post(reverse("logs_sessions:create_logs_session"))
         self.assertEquals(response.status_code, 401)
 
     def test_init_logs_session(self):
         self.client.credentials(HTTP_API_KEY=self.user.api_key)
-        response = self.client.post(f"/api/sessions/init/")
+        response = self.client.post(reverse("logs_sessions:create_logs_session"))
         session_uuid = response.json().get("uuid")
 
         self.assertEquals(response.status_code, 201)
@@ -43,3 +44,11 @@ class TestLogsSessionsViews(APITestCase):
 
         session = models.LogsSession.objects.filter(uuid=session_uuid).first()
         self.assertIsNot(session, None)
+
+    def test_init_logs_session_already_existing(self):
+        self.client.credentials(HTTP_API_KEY=self.user.api_key)
+        self.client.post(reverse("logs_sessions:create_logs_session"))
+
+        response = self.client.post(reverse("logs_sessions:create_logs_session"))
+
+        self.assertEquals(response.status_code, 200)
