@@ -28,3 +28,13 @@ class TestViews(APITestCase):
     def test_auth_check_as_not_auth(self):
         response = self.client.get("/api/auth-check/")
         self.assertEquals(response.status_code, 401)
+
+    def test_event_detected_as_auth(self):
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
+        response = self.client.get("/api/event-detected/")
+
+        self.assertEquals(response.status_code, 200)
+
+    def test_event_detected_as_not_auth(self):
+        response = self.client.get("/api/event-detected/")
+        self.assertEquals(response.status_code, 401)

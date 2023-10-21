@@ -19,3 +19,10 @@ def health_check(request):
 @authentication_classes([ApiKeyAuth, TokenAuth])
 def auth_check(request):
     return Response(status.HTTP_200_OK)
+
+
+@extend_schema(**docs_schema.event_detected)
+@api_view(["GET"])
+@authentication_classes([ApiKeyAuth, TokenAuth])
+def event_detected(request):
+    return Response(status.HTTP_200_OK)

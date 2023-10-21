@@ -21,3 +21,17 @@ auth_check = {
         401: None
     }
 }
+
+
+event_detected = {
+    "parameters": [],
+    "description": "Sleepwalking event detected",
+    "operation_id": "event_detected",
+    "tags": ["core"],
+    "request": None,
+    "responses": {
+        200: None,
+        404: None,
+        401: None
+    }
+}

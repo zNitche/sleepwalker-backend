@@ -90,6 +90,22 @@ paths:
           description: No response body
         '401':
           description: No response body
+  /api/event-detected/:
+    get:
+      operationId: event_detected
+      description: Sleepwalking event detected
+      tags:
+      - core
+      security:
+      - ApiKeyAuth: []
+      - TokenAuth: []
+      responses:
+        '200':
+          description: No response body
+        '404':
+          description: No response body
+        '401':
+          description: No response body
   /api/health-check/:
     get:
       operationId: health_check
