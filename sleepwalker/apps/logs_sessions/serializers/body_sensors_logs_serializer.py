@@ -5,8 +5,8 @@ from sleepwalker.apps.logs_sessions import models
 class BodySensorsLogsSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.BodySensorsLog
-        fields = ["uuid", "date", "heart_beat", "acceleration_x", "acceleration_y", "acceleration_z"]
-        read_only_fields = ["uuid", "date"]
+        fields = ["date", "heart_beat", "acceleration_x", "acceleration_y", "acceleration_z"]
+        read_only_fields = ["date"]
 
     def create(self, validated_data):
         log_session = models.LogsSession.objects.filter(uuid=validated_data["session_uuid"]).first()

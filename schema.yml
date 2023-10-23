@@ -359,9 +359,6 @@ components:
     BodySensorsLogs:
       type: object
       properties:
-        uuid:
-          type: string
-          readOnly: true
         date:
           type: string
           format: date-time
@@ -380,13 +377,9 @@ components:
           format: double
       required:
       - date
-      - uuid
     EnvironmentSensorsLogs:
       type: object
       properties:
-        uuid:
-          type: string
-          readOnly: true
         date:
           type: string
           format: date-time
@@ -399,7 +392,6 @@ components:
           format: double
       required:
       - date
-      - uuid
     Login:
       type: object
       properties:
