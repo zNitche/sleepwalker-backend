@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase, APIClient, override_settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from datetime import datetime
 from sleepwalker.apps.authenticate.models import AuthToken
 from sleepwalker.apps.logs_sessions import models
 from sleepwalker.utils import tokens_utils
@@ -29,6 +30,25 @@ class TestLogsSessionsViews(APITestCase):
 
         self.assertEquals(response.status_code, 200)
         self.assertEquals(len(response.json().get("data")), 0)
+
+    def test_latest_running_logs_session_not_auth(self):
+        response = self.client.get(reverse("logs_sessions:latest_running_logs_session"))
+
+        self.assertEquals(response.status_code, 401)
+
+    def test_latest_running_logs_session(self):
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
+        response = self.client.get(reverse("logs_sessions:latest_running_logs_session"))
+
+        self.assertEquals(response.status_code, 404)
+
+        models.LogsSession.objects.create(user=self.user, end_date=datetime.utcnow())
+        unfinished_session = models.LogsSession.objects.create(user=self.user)
+
+        response = self.client.get(reverse("logs_sessions:latest_running_logs_session"))
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.json().get("uuid"), unfinished_session.uuid)
 
     def test_init_logs_session_not_auth(self):
         response = self.client.post(reverse("logs_sessions:create_logs_session"))

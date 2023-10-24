@@ -117,3 +117,16 @@ create_environment_sensors_log = {
         404: None
     }
 }
+
+
+latest_running_logs_session = {
+    "description": "get latest running logs session for user",
+    "operation_id": "latest_running_logs_session",
+    "tags": ["logs_sessions"],
+    "request": None,
+    "responses": {
+        200: LogsSessionSerializer,
+        401: None,
+        404: None
+    }
+}

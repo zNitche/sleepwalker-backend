@@ -330,6 +330,25 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /api/sessions/current/:
+    get:
+      operationId: latest_running_logs_session
+      description: get latest running logs session for user
+      tags:
+      - logs_sessions
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsSession'
+          description: ''
+        '401':
+          description: No response body
+        '404':
+          description: No response body
   /api/sessions/init/:
     post:
       operationId: create_logs_session

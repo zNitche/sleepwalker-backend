@@ -25,6 +25,19 @@ def logs_sessions(request):
     return paginator.get_paginated_response(serializer.data)
 
 
+@extend_schema(**docs_schema.latest_running_logs_session)
+@api_view(["GET"])
+@authentication_classes([TokenAuth])
+def latest_running_logs_session(request):
+    latest_session = models.LogsSession.objects.filter(user=request.user).order_by("-start_date").first()
+
+    if latest_session and latest_session.end_date is None:
+        return Response(LogsSessionSerializer(latest_session).data, status=status.HTTP_200_OK)
+
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 @extend_schema(**docs_schema.create_logs_session)
 @api_view(["POST"])
 @authentication_classes([ApiKeyAuth])
