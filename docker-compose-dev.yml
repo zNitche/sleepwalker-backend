@@ -7,3 +7,15 @@ services:
     restart: "no"
     ports:
       - "6000:6000"
+  postgresql:
+    image: postgres:alpine3.18
+    container_name: postgresql
+    restart: "no"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=sleepwalker
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

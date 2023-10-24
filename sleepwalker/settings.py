@@ -34,7 +34,6 @@ TESTING = False
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -74,24 +73,26 @@ else:
     CELERY_BROKER_URL = "redis://redis:6000/2"
     CELERY_RESULT_BACKEND = "redis://redis:6000/2"
 
-
 ROOT_URLCONF = 'sleepwalker.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
+TEMPLATES = []
+
+if DEBUG:
+    TEMPLATES.append(
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.request',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.contrib.messages.context_processors.messages',
+                ],
+            },
         },
-    },
-]
+    )
 
 WSGI_APPLICATION = 'sleepwalker.wsgi.application'
 
@@ -106,11 +107,25 @@ MIGRATION_MODULES = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_DIR, "database", "app.sqlite3"),
+    "dev": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "sleepwalker",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": "127.0.0.1",
+        "PORT": 5432
+    },
+    "production": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "sleepwalker",
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": "postgresql",
+        "PORT": 5432
     }
 }
+
+DATABASES["default"] = DATABASES["dev" if DEBUG else "production"]
 
 CACHES = {
     "default": {
@@ -120,11 +135,6 @@ CACHES = {
 }
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = []
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -206,7 +216,6 @@ CELERY_LOGGER_NAME = "celery_logger"
 AUTH_USER_MODEL = "authenticate.User"
 
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema" if DEBUG else None,
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -214,16 +223,19 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": []
 }
 
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Sleepwalker API",
-    "DESCRIPTION": "",
-    "VERSION": "1.0.0",
-    "SERVERS": [
-        {"url": "http://127.0.0.1:8000/", "description": "dev"}
-    ],
-    "SERVE_INCLUDE_SCHEMA": False,
-    "DISABLE_ERRORS_AND_WARNINGS": True,
-    "TAGS": ["auth", "core", "logs_sessions", "body_sensors_logs", "environment_sensors_logs"]
-}
+if DEBUG:
+    REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "drf_spectacular.openapi.AutoSchema"
+
+    SPECTACULAR_SETTINGS = {
+        "TITLE": "Sleepwalker API",
+        "DESCRIPTION": "",
+        "VERSION": "1.0.0",
+        "SERVERS": [
+            {"url": "http://127.0.0.1:8000/", "description": "dev"}
+        ],
+        "SERVE_INCLUDE_SCHEMA": False,
+        "DISABLE_ERRORS_AND_WARNINGS": True,
+        "TAGS": ["auth", "core", "logs_sessions", "body_sensors_logs", "environment_sensors_logs"]
+    }
 
 API_AUTH_TOKEN_LIFESPAN = datetime.timedelta(days=7)

@@ -6,9 +6,21 @@ services:
     container_name: redis
     restart: unless-stopped
 
+  postgresql:
+    image: postgres:alpine3.18
+    container_name: postgresql
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - ${DB_PATH}:/var/lib/postgresql/data
+    env_file:
+      - .env
+
   backend:
     depends_on:
       - redis
+      - postgresql
     container_name: sleepwalker_backend
     command: /bin/sh -c "/sleepwalker/scripts/entrypoint.sh"
     build: .
@@ -16,7 +28,6 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ${DB_PATH}:/sleepwalker/database
       - ${LOGS_PATH}:/sleepwalker/logs
     env_file:
       - .env
@@ -25,12 +36,12 @@ services:
     depends_on:
       - redis
       - backend
+      - postgresql
     command: /bin/sh -c "/sleepwalker/scripts/celery_entrypoint.sh"
     container_name: sleepwalker_celery_worker
     build: .
     restart: unless-stopped
     volumes:
-      - ${DB_PATH}:/sleepwalker/database
       - ${LOGS_PATH}:/sleepwalker/logs
     env_file:
       - .env
