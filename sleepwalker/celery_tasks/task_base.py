@@ -55,7 +55,8 @@ class TaskBase(celery.Task):
         process_data = {
             ProcessesConsts.PROCESS_NAME: self.get_process_name(),
             ProcessesConsts.PROCESS_TIMESTAMP: self.timestamp,
-            ProcessesConsts.IS_RUNNING: self.is_running
+            ProcessesConsts.IS_RUNNING: self.is_running,
+            ProcessesConsts.TASK_ID: self.request.id
         }
 
         return process_data

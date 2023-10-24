@@ -5,6 +5,7 @@ from drf_spectacular.utils import extend_schema
 from sleepwalker.api_docs.apps import core_schema as docs_schema
 from sleepwalker.apps.authenticate.auth_handlers.api_key_auth import ApiKeyAuth
 from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
+from sleepwalker.utils import tasks_utils
 
 
 @extend_schema(**docs_schema.health_check)
@@ -25,4 +26,7 @@ def auth_check(request):
 @api_view(["GET"])
 @authentication_classes([ApiKeyAuth, TokenAuth])
 def event_detected(request):
-    return Response(status.HTTP_200_OK)
+    detected_for_user = tasks_utils.check_if_sleepwalking_detected_for_user(request.user.id)
+
+    response_status = status.HTTP_200_OK if detected_for_user else status.HTTP_404_NOT_FOUND
+    return Response(response_status)

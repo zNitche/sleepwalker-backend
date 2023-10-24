@@ -30,7 +30,9 @@ def close_logs_session(request, session_uuid):
     log_session.end_date = datetime.utcnow()
     log_session.save()
 
-    tasks_utils.stop_task(request.user.id, session_uuid, "SleepwalkingDetectionProcess")
+    sleepwalking_process_id = tasks_utils.get_task_id(request.user.id, session_uuid,
+                                                      "SleepwalkingDetectionProcess")
+    tasks_utils.force_stop_task_by_id(sleepwalking_process_id)
 
     return Response(status=status.HTTP_200_OK)
 
