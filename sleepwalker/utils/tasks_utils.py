@@ -23,14 +23,14 @@ def get_keys_by_pattern(pattern):
 
 
 def get_key_by_pattern(pattern):
-    keys = cache._cache.get_client().key(pattern)
+    keys = cache._cache.get_client().keys(pattern)
     cleared_keys = []
 
     for key in keys:
         cleared_keys.append(key.decode().split(":")[2])
         break
 
-    return cleared_keys[0] if len(cleared_keys) == 0 else None
+    return cleared_keys[0] if len(cleared_keys) > 0 else None
 
 
 def get_tasks_keys_by_type(task_type):
