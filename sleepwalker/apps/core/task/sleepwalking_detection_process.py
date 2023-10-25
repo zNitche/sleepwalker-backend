@@ -2,18 +2,33 @@ from sleepwalker.celery_tasks.task_base import TaskBase
 from sleepwalker.consts import TasksDelays, ProcessesConsts
 from sleepwalker.apps.logs_sessions import models
 import time
+import statistics
 
 
 class SleepwalkingDetectionProcess(TaskBase):
     def __init__(self):
         super().__init__()
+        self.cache_data_timeout = 60
 
         self.user_id = None
         self.logs_session_id = None
 
         self.detected = False
+        self.seconds_per_log = 2
 
-        self.cache_data_timeout = 60
+        self.hb_percentage_threshold = 25
+
+        self.body_logs_per_long_segment = 300 * self.seconds_per_log
+        self.body_logs_per_short_segment = 5 * self.seconds_per_log
+        self.body_logs_offset = 0
+
+        self.body_logs_event_detected = False
+
+        self.body_logs_data = {
+            "hb_mean_long": 0,
+            "hb_mean_short": 0,
+            "hb_values": []
+        }
 
     def run(self, user_id, logs_session_id):
         self.user_id = user_id
@@ -38,20 +53,84 @@ class SleepwalkingDetectionProcess(TaskBase):
 
         return process_data
 
-    def get_body_logs(self):
-        logs = models.BodySensorsLog.objects.filter(log_session__uuid=self.logs_session_id).all()
+    def get_body_logs_queryset(self):
+        return models.BodySensorsLog.objects.filter(
+            log_session__uuid=self.logs_session_id).order_by("-date")
+
+    def get_body_logs(self, limit=30, offset=None):
+        body_sensors_logs_queryset = self.get_body_logs_queryset()
+
+        if offset is not None:
+            logs = body_sensors_logs_queryset[offset:offset + limit]
+        else:
+            logs = body_sensors_logs_queryset[:limit]
 
         return logs
+
+    def get_body_logs_count(self):
+        body_sensors_logs_queryset = self.get_body_logs_queryset()
+
+        return body_sensors_logs_queryset.count()
+
+    def process_body_logs_short_mean(self):
+        logs = self.get_body_logs(limit=self.body_logs_per_short_segment)
+
+        if len(logs) >= self.body_logs_per_short_segment:
+            heart_beat_values = [log.heart_beat for log in logs]
+            self.body_logs_data["hb_mean_short"] = round(statistics.mean(heart_beat_values), 2)
+
+    def process_body_logs_long_mean(self):
+        logs = self.get_body_logs(limit=self.body_logs_per_long_segment, offset=self.body_logs_offset)
+
+        if len(logs) == self.body_logs_per_long_segment:
+            self.body_logs_offset += self.body_logs_per_long_segment
+
+            heart_beat_values = [log.heart_beat for log in self.get_body_logs(self.body_logs_per_long_segment)]
+            self.body_logs_data["hb_mean_long"] = round(statistics.mean(heart_beat_values), 2)
+
+            hb_values = self.body_logs_data["hb_values"]
+            hb_values.extend(heart_beat_values)
+
+            last_values_count = 1200 * self.seconds_per_log
+
+            if len(hb_values) >= last_values_count:
+                self.body_logs_data["hb_values"] = hb_values[-last_values_count:]
+
+    def process_body_logs(self):
+        self.process_body_logs_long_mean()
+        self.process_body_logs_short_mean()
+
+        hb_mean_long = self.body_logs_data["hb_mean_long"]
+        hb_mean_short = self.body_logs_data["hb_mean_short"]
+
+        if hb_mean_long > 0:
+            long_threshold = hb_mean_long + ((hb_mean_long / 100) * self.hb_percentage_threshold)
+
+            if hb_mean_short >= long_threshold:
+                self.body_logs_event_detected = True
+
+        self.log_info(f'{len(self.body_logs_data["hb_values"])} | '
+                      f'{hb_mean_long} | '
+                      f'{hb_mean_short} | '
+                      f'{self.body_logs_event_detected}')
+
+    def check_sleepwalking(self):
+        detection = self.body_logs_event_detected
+
+        if self.detected != detection:
+            self.detected = detection
+            self.update_process_data()
 
     def mainloop(self):
         try:
             self.log_info(f"Starting {self.get_process_name()} for"
-                          f" {self.user_id} and sessions {self.logs_session_id}")
+                          f" {self.user_id} and sessions {self.logs_session_id} | {self.request.id}")
 
             while self.is_running:
                 self.update_process_data()
 
-                self.get_body_logs()
+                self.process_body_logs()
+                self.check_sleepwalking()
 
                 time.sleep(TasksDelays.SLEEPWALKING_DETECTION_DELAY)
 

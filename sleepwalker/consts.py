@@ -1,5 +1,5 @@
 class TasksDelays:
-    SLEEPWALKING_DETECTION_DELAY = 1
+    SLEEPWALKING_DETECTION_DELAY = 2
 
 
 class ProcessesConsts:
