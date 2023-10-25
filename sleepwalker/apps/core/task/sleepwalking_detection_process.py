@@ -26,8 +26,7 @@ class SleepwalkingDetectionProcess(TaskBase):
 
         self.body_logs_data = {
             "hb_mean_long": 0,
-            "hb_mean_short": 0,
-            "hb_values": []
+            "hb_mean_short": 0
         }
 
     def run(self, user_id, logs_session_id):
@@ -88,14 +87,6 @@ class SleepwalkingDetectionProcess(TaskBase):
             heart_beat_values = [log.heart_beat for log in self.get_body_logs(self.body_logs_per_long_segment)]
             self.body_logs_data["hb_mean_long"] = round(statistics.mean(heart_beat_values), 2)
 
-            hb_values = self.body_logs_data["hb_values"]
-            hb_values.extend(heart_beat_values)
-
-            last_values_count = 1200 * self.seconds_per_log
-
-            if len(hb_values) >= last_values_count:
-                self.body_logs_data["hb_values"] = hb_values[-last_values_count:]
-
     def process_body_logs(self):
         self.process_body_logs_long_mean()
         self.process_body_logs_short_mean()
@@ -108,11 +99,6 @@ class SleepwalkingDetectionProcess(TaskBase):
 
             if hb_mean_short >= long_threshold:
                 self.body_logs_event_detected = True
-
-        self.log_info(f'{len(self.body_logs_data["hb_values"])} | '
-                      f'{hb_mean_long} | '
-                      f'{hb_mean_short} | '
-                      f'{self.body_logs_event_detected}')
 
     def check_sleepwalking(self):
         detection = self.body_logs_event_detected
