@@ -23,6 +23,19 @@ auth_check = {
 }
 
 
+reset_logs_session = {
+    "description": "reset current logs session",
+    "operation_id": "reset_logs_session",
+    "tags": ["core"],
+    "request": None,
+    "responses": {
+        200: None,
+        401: None,
+        404: None
+    }
+}
+
+
 event_detected = {
     "parameters": [],
     "description": "Sleepwalking event detected",

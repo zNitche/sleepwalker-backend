@@ -13,6 +13,7 @@ class TaskBase(celery.Task):
 
         self.process_cache_key = f"{self.get_process_name()}_{self.timestamp}"
         self.cache_data_timeout = 30
+        self.reset_process_request = False
 
         self.logger = logging.getLogger(settings.CELERY_LOGGER_NAME)
 
@@ -56,7 +57,8 @@ class TaskBase(celery.Task):
             ProcessesConsts.PROCESS_NAME: self.get_process_name(),
             ProcessesConsts.PROCESS_TIMESTAMP: self.timestamp,
             ProcessesConsts.IS_RUNNING: self.is_running,
-            ProcessesConsts.TASK_ID: self.request.id
+            ProcessesConsts.TASK_ID: self.request.id,
+            ProcessesConsts.RESET_PROCESS: self.reset_process_request
         }
 
         return process_data
@@ -86,3 +88,16 @@ class TaskBase(celery.Task):
         running = True if running_processes > 1 else False
 
         return running
+
+    def check_process_reset_request(self):
+        process_data = self.read_from_cache(self.process_cache_key)
+
+        if process_data:
+            reset_process_request = process_data.get(ProcessesConsts.RESET_PROCESS)
+
+            if reset_process_request:
+                self.handle_process_data()
+                self.reset_process_request = False
+
+    def handle_process_data(self):
+        pass

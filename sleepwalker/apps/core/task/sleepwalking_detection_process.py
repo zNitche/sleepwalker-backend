@@ -8,7 +8,9 @@ import statistics
 class SleepwalkingDetectionProcess(TaskBase):
     def __init__(self):
         super().__init__()
+
         self.cache_data_timeout = 60
+        self.extra_delay = 0
 
         self.user_id = None
         self.logs_session_id = None
@@ -18,8 +20,8 @@ class SleepwalkingDetectionProcess(TaskBase):
 
         self.hb_percentage_threshold = 25
 
-        self.body_logs_per_long_segment = 300 * self.seconds_per_log
-        self.body_logs_per_short_segment = 5 * self.seconds_per_log
+        self.body_logs_per_long_segment = 600 * self.seconds_per_log
+        self.body_logs_per_short_segment = 8 * self.seconds_per_log
         self.body_logs_offset = 0
 
         self.body_logs_event_detected = False
@@ -107,18 +109,32 @@ class SleepwalkingDetectionProcess(TaskBase):
             self.detected = detection
             self.update_process_data()
 
+    def handle_process_data(self):
+        self.body_logs_data["hb_mean_long"] = 0
+        self.body_logs_data["hb_mean_short"] = 0
+
+        self.detected = False
+        self.body_logs_event_detected = False
+        self.extra_delay = TasksDelays.SLEEPWALKING_DETECTION_RESET_EXTRA_DELAY
+
     def mainloop(self):
         try:
             self.log_info(f"Starting {self.get_process_name()} for"
                           f" {self.user_id} and sessions {self.logs_session_id} | {self.request.id}")
 
             while self.is_running:
+                self.check_process_reset_request()
                 self.update_process_data()
 
                 self.process_body_logs()
                 self.check_sleepwalking()
 
-                time.sleep(TasksDelays.SLEEPWALKING_DETECTION_DELAY)
+                delay = TasksDelays.SLEEPWALKING_DETECTION_DELAY
+                if self.extra_delay > 0:
+                    delay += self.extra_delay
+                    self.extra_delay = 0
+
+                time.sleep(delay)
 
         except Exception as e:
             self.log_error(str(e))

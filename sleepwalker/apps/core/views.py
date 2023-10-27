@@ -12,14 +12,14 @@ from sleepwalker.utils import tasks_utils
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def health_check(request):
-    return Response(status.HTTP_200_OK)
+    return Response(status=status.HTTP_200_OK)
 
 
 @extend_schema(**docs_schema.auth_check)
 @api_view(["GET"])
 @authentication_classes([ApiKeyAuth, TokenAuth])
 def auth_check(request):
-    return Response(status.HTTP_200_OK)
+    return Response(status=status.HTTP_200_OK)
 
 
 @extend_schema(**docs_schema.event_detected)
@@ -28,5 +28,18 @@ def auth_check(request):
 def event_detected(request):
     detected_for_user = tasks_utils.check_if_sleepwalking_detected_for_user(request.user.id)
 
-    response_status = status.HTTP_200_OK if detected_for_user else status.HTTP_404_NOT_FOUND
+    response_status = status.HTTP_200_OK if detected_for_user else status.HTTP_204_NO_CONTENT
+    return Response(status=response_status)
+
+
+@extend_schema(**docs_schema.reset_logs_session)
+@api_view(["POST"])
+@authentication_classes([ApiKeyAuth, TokenAuth])
+def reset_logs_session(request):
+    detected_for_user = tasks_utils.check_if_sleepwalking_detected_for_user(request.user.id)
+
+    if detected_for_user:
+        tasks_utils.reset_sleepwalking_logger_for_user(request.user.id)
+
+    response_status = status.HTTP_200_OK if detected_for_user else status.HTTP_204_NO_CONTENT
     return Response(response_status)

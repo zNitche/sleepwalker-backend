@@ -85,6 +85,16 @@ def check_if_sleepwalking_detected_for_user(user_id):
         return False
 
 
+def reset_sleepwalking_logger_for_user(user_id):
+    task_key = get_key_by_pattern(f"*{user_id}_*_SleepwalkingDetectionProcess*")
+
+    if task_key:
+        task_data = get_task_data_by_key(task_key)
+        task_data[ProcessesConsts.RESET_PROCESS] = True
+
+        write_to_cache(task_key, task_data)
+
+
 def run_task(task, params):
     if not settings.TESTING:
         task.apply_async(params)

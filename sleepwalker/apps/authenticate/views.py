@@ -35,4 +35,4 @@ def logout(request):
     auth_token.blacklisted = True
     auth_token.save()
 
-    return Response(status.HTTP_200_OK)
+    return Response(status=status.HTTP_200_OK)
