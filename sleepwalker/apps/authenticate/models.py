@@ -24,6 +24,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
 
+class Settings(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+    sw_detection_heart_beat_percentage_threshold = models.IntegerField(null=False, default=25)
+
+    def __str__(self):
+        return self.user.username
+
+
 class AuthToken(models.Model):
     key = models.CharField(max_length=256, unique=True, null=False, default=tokens_utils.generate_token)
     creation_date = models.DateTimeField(null=False, default=datetime.datetime.utcnow)

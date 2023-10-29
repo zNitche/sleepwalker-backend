@@ -90,6 +90,58 @@ paths:
           description: No response body
         '401':
           description: No response body
+  /api/auth/user/settings/:
+    get:
+      operationId: auth_user_settings_retrieve
+      description: Get user settings
+      tags:
+      - settings
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+          description: ''
+        '401':
+          description: No response body
+    put:
+      operationId: auth_user_settings_update
+      description: Update user settings
+      tags:
+      - settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSettings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserSettings'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserSettings'
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '401':
+          description: No response body
   /api/event-detected/:
     get:
       operationId: event_detected
@@ -463,6 +515,13 @@ components:
           type: string
           nullable: true
           maxLength: 16
+    UserSettings:
+      type: object
+      properties:
+        sw_detection_heart_beat_percentage_threshold:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
@@ -483,3 +542,4 @@ tags:
 - logs_sessions
 - body_sensors_logs
 - environment_sensors_logs
+- settings

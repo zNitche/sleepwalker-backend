@@ -36,6 +36,13 @@ class CustomUserAdmin(UserAdmin):
     readonly_fields = ("date_joined",)
 
 
+class SettingsAdmin(ModelAdmin):
+    list_display = ("user_id",)
+    search_fields = ("user_id",)
+
+    readonly_fields = ["user_id"]
+
+
 class AuthTokenAdmin(ModelAdmin):
     list_display = ("short_key", "creation_date", "expiration_date", "blacklisted", "is_expired", "user_id")
     search_fields = ("user_id", "key", "is_expired")

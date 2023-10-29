@@ -17,6 +17,7 @@ class TestModels(APITestCase):
         user = get_user_model().objects.filter(username="test_user").first()
 
         self.assertIsNot(user, None)
+        self.assertIsNot(user.settings, None)
 
     def test_existing_user(self):
         user = get_user_model().objects.filter(username=self.username).first()
