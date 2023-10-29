@@ -109,7 +109,7 @@ class SleepwalkingDetectionProcess(TaskBase):
             self.detected = detection
             self.update_process_data()
 
-    def handle_process_data(self):
+    def handle_process_data_after_reset(self):
         self.body_logs_data["hb_mean_long"] = 0
         self.body_logs_data["hb_mean_short"] = 0
 

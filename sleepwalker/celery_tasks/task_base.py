@@ -96,8 +96,8 @@ class TaskBase(celery.Task):
             reset_process_request = process_data.get(ProcessesConsts.RESET_PROCESS)
 
             if reset_process_request:
-                self.handle_process_data()
+                self.handle_process_data_after_reset()
                 self.reset_process_request = False
 
-    def handle_process_data(self):
+    def handle_process_data_after_reset(self):
         pass
