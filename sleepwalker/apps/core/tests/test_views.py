@@ -34,7 +34,7 @@ class TestViews(APITestCase):
         self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
         response = self.client.get(reverse("core:event_detected"))
 
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, 204)
 
     def test_event_detected_as_not_auth(self):
         response = self.client.get(reverse("core:event_detected"))
