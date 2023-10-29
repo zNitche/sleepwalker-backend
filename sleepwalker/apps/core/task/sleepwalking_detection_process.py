@@ -14,11 +14,10 @@ class SleepwalkingDetectionProcess(TaskBase):
 
         self.user_id = None
         self.logs_session_id = None
+        self.hb_percentage_threshold = None
 
         self.detected = False
         self.seconds_per_log = 2
-
-        self.hb_percentage_threshold = 25
 
         self.body_logs_per_long_segment = 600 * self.seconds_per_log
         self.body_logs_per_short_segment = 8 * self.seconds_per_log
@@ -31,8 +30,9 @@ class SleepwalkingDetectionProcess(TaskBase):
             "hb_mean_short": 0
         }
 
-    def run(self, user_id, logs_session_id):
-        self.user_id = user_id
+    def run(self, user, logs_session_id):
+        self.user_id = user.id
+        self.hb_percentage_threshold = user.settings.sw_detection_heart_beat_percentage_threshold
         self.logs_session_id = logs_session_id
         self.process_cache_key = (f"{self.user_id}_{self.logs_session_id}_"
                                   f"{self.get_process_name()}_{self.timestamp}")

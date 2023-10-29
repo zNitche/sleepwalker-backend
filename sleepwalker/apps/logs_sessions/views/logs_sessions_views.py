@@ -46,7 +46,7 @@ def create_logs_session(request):
         session = models.LogsSession.objects.create(user=request.user)
         serializer = LogsSessionSerializer(session)
 
-        tasks_utils.run_task(celery_tasks.SleepwalkingDetectionProcess, (request.user.id, session.uuid))
+        tasks_utils.run_task(celery_tasks.SleepwalkingDetectionProcess, (request.user, session.uuid))
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
