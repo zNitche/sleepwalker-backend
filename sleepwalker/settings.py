@@ -15,6 +15,7 @@ import os
 import datetime
 import secrets
 import dotenv
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'rest_framework',
+    'corsheaders',
     'sleepwalker.apps.authenticate',
     'sleepwalker.apps.core',
     'sleepwalker.apps.logs_sessions',
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware'
 ]
 
@@ -72,6 +75,15 @@ else:
 
     CELERY_BROKER_URL = "redis://redis:6000/2"
     CELERY_RESULT_BACKEND = "redis://redis:6000/2"
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = (
+    *default_headers,
+    "auth-token",
+    "api-key"
+)
 
 ROOT_URLCONF = 'sleepwalker.urls'
 
