@@ -1,3 +1,5 @@
+import datetime
+
 from sleepwalker.celery_tasks.task_base import TaskBase
 from sleepwalker.consts import TasksDelays, ProcessesConsts
 from sleepwalker.apps.logs_sessions import models
@@ -25,14 +27,16 @@ class SleepwalkingDetectionProcess(TaskBase):
 
         self.body_logs_event_detected = False
 
+        self.sleepwalking_detected_object = None
+
         self.body_logs_data = {
             "hb_mean_long": 0,
             "hb_mean_short": 0
         }
 
-    def run(self, user, logs_session_id):
-        self.user_id = user.id
-        self.hb_percentage_threshold = user.settings.sw_detection_heart_beat_percentage_threshold
+    def run(self, user_id, settings, logs_session_id):
+        self.user_id = user_id
+        self.hb_percentage_threshold = settings.get("sw_detection_heart_beat_percentage_threshold", 25)
         self.logs_session_id = logs_session_id
         self.process_cache_key = (f"{self.user_id}_{self.logs_session_id}_"
                                   f"{self.get_process_name()}_{self.timestamp}")
@@ -102,10 +106,22 @@ class SleepwalkingDetectionProcess(TaskBase):
             if hb_mean_short >= long_threshold:
                 self.body_logs_event_detected = True
 
+    def handle_log_object(self):
+        if self.detected and self.sleepwalking_detected_object is None:
+            self.sleepwalking_detected_object = models.SleepwalkingEvent.objects.create(
+                logs_session__id=self.logs_session_id, user__id=self.user_id)
+
+        elif not self.detected and self.sleepwalking_detected_object:
+            self.sleepwalking_detected_object.end_date = datetime.datetime.utcnow()
+            self.sleepwalking_detected_object.save()
+
+            self.sleepwalking_detected_object = None
+
     def check_sleepwalking(self):
         detection = self.body_logs_event_detected
 
         if self.detected != detection:
+            self.handle_log_object()
             self.detected = detection
             self.update_process_data()
 

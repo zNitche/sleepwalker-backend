@@ -38,3 +38,13 @@ class EnvironmentSensorsLog(models.Model):
     log_session = models.ForeignKey(LogsSession, on_delete=models.CASCADE, null=False,
                                     related_name="environment_sensors_logs")
 
+
+class SleepwalkingEvent(models.Model):
+    start_date = models.DateTimeField(null=False, default=datetime.datetime.utcnow)
+    end_date = models.DateTimeField(null=True, default=None)
+
+    logs_session = models.ForeignKey(LogsSession, on_delete=models.CASCADE, null=False,
+                                     related_name="sleepwalking_events")
+
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=False,
+                             related_name="sleepwalking_events")
