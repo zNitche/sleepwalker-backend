@@ -8,6 +8,7 @@ from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
 from sleepwalker.apps.logs_sessions import models
 from sleepwalker.apps.logs_sessions.paginators import LogsSessionsPagination
 from sleepwalker.apps.logs_sessions.serializers.logs_session_serializer import LogsSessionSerializer
+from sleepwalker.apps.logs_sessions.serializers.statistics_serializer import StatisticsSerializer
 from sleepwalker.utils import models_utils, tasks_utils
 from sleepwalker.apps.core import tasks as celery_tasks
 
@@ -46,9 +47,38 @@ def create_logs_session(request):
         session = models.LogsSession.objects.create(user=request.user)
         serializer = LogsSessionSerializer(session)
 
-        tasks_utils.run_task(celery_tasks.SleepwalkingDetectionProcess, (request.user, session.uuid))
+        user = request.user
+        settings = {
+            "sw_detection_heart_beat_percentage_threshold": user.settings.sw_detection_heart_beat_percentage_threshold
+        }
+
+        tasks_utils.run_task(celery_tasks.SleepwalkingDetectionProcess, (user.id, settings, session.uuid))
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     else:
         return Response(status=status.HTTP_200_OK)
+
+
+@extend_schema(**docs_schema.logs_sessions_statistics)
+@api_view(["GET"])
+@authentication_classes([TokenAuth])
+def logs_sessions_statistics(request):
+    log_sessions_for_user = models.LogsSession.objects.filter(user=request.user).order_by("-start_date")
+
+    first_session = log_sessions_for_user.first()
+    last_session = log_sessions_for_user.last()
+
+    data = {
+        "logs_sessions": log_sessions_for_user.count(),
+        "first_session_start_date": first_session.start_date if first_session else None,
+        "last_session_start_date": last_session.start_date if last_session else None,
+        "first_session_end_date": first_session.end_date if first_session else None,
+        "last_session_end_date": last_session.end_date if last_session else None,
+        "sleepwalking_events_count": request.user.sleepwalking_events.count(),
+        "sleepwalking_events": models_utils.get_latest_sleepwalking_events_count(request.user.id)
+    }
+
+    serializer = StatisticsSerializer(data)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)

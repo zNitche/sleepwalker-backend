@@ -72,3 +72,12 @@ class TestLogsSessionsViews(APITestCase):
         response = self.client.post(reverse("logs_sessions:create_logs_session"))
 
         self.assertEquals(response.status_code, 200)
+
+    def test_logs_sessions_statistics_not_auth(self):
+        response = self.client.get(reverse("logs_sessions:logs_sessions_statistics"))
+        self.assertEquals(response.status_code, 401)
+
+    def test_logs_sessions_statistics(self):
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
+        response = self.client.get(reverse("logs_sessions:logs_sessions_statistics"))
+        self.assertEquals(response.status_code, 200)

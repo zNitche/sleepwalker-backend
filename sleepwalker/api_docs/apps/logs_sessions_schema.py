@@ -1,6 +1,7 @@
 from sleepwalker.apps.logs_sessions.serializers.logs_session_serializer import LogsSessionSerializer
 from sleepwalker.apps.logs_sessions.serializers.environment_sensors_logs_serializer import EnvironmentSensorsLogsSerializer
 from sleepwalker.apps.logs_sessions.serializers.body_sensors_logs_serializer import BodySensorsLogsSerializer
+from sleepwalker.apps.logs_sessions.serializers.statistics_serializer import StatisticsSerializer
 
 
 logs_sessions = {
@@ -25,6 +26,17 @@ create_logs_session = {
     "responses": {
         200: None,
         201: LogsSessionSerializer
+    }
+}
+
+logs_sessions_statistics = {
+    "parameters": [],
+    "description": "Get statistics for logs sessions",
+    "operation_id": "logs_sessions_statistics",
+    "tags": ["logs_sessions"],
+    "request": None,
+    "responses": {
+        200: StatisticsSerializer
     }
 }
 

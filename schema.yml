@@ -434,6 +434,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/LogsSession'
           description: ''
+  /api/sessions/statistics/:
+    get:
+      operationId: logs_sessions_statistics
+      description: Get statistics for logs sessions
+      tags:
+      - logs_sessions
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statistics'
+          description: ''
 components:
   schemas:
     AuthToken:
@@ -508,6 +523,36 @@ components:
       - end_date
       - start_date
       - uuid
+    Statistics:
+      type: object
+      properties:
+        first_session_start_date:
+          type: string
+          format: date-time
+        last_session_start_date:
+          type: string
+          format: date-time
+        first_session_end_date:
+          type: string
+          format: date-time
+        last_session_end_date:
+          type: string
+          format: date-time
+        logs_sessions:
+          type: integer
+        sleepwalking_events:
+          type: object
+          additionalProperties: {}
+        sleepwalking_events_count:
+          type: integer
+      required:
+      - first_session_end_date
+      - first_session_start_date
+      - last_session_end_date
+      - last_session_start_date
+      - logs_sessions
+      - sleepwalking_events
+      - sleepwalking_events_count
     UserApiKey:
       type: object
       properties:
