@@ -34,7 +34,7 @@ class Settings(models.Model):
 
 
 class AuthToken(models.Model):
-    key = models.CharField(max_length=256, unique=True, null=False, default=tokens_utils.generate_token)
+    key = models.CharField(max_length=512, unique=True, null=False, default=tokens_utils.generate_token)
     creation_date = models.DateTimeField(null=False, default=datetime.datetime.utcnow)
     expiration_date = models.DateTimeField(null=False, default=tokens_utils.get_token_expiration_date)
     blacklisted = models.BooleanField(null=False, default=False)

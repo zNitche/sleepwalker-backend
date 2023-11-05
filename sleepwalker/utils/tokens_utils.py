@@ -4,7 +4,7 @@ import secrets
 import uuid
 
 
-def generate_token(nbytes_length=128):
+def generate_token(nbytes_length=256):
     return secrets.token_hex(nbytes_length)
 
 
