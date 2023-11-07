@@ -50,28 +50,3 @@ get_api_key = {
         401:  None
     }
 }
-
-
-get_user_settings = {
-    "parameters": [],
-    "description": "Get user settings",
-    "tags": ["settings"],
-    "request": None,
-    "responses": {
-        200:  serializers.UserSettingsSerializer,
-        401:  None
-    }
-}
-
-
-update_user_settings = {
-    "parameters": [],
-    "description": "Update user settings",
-    "tags": ["settings"],
-    "request": serializers.UserSettingsSerializer,
-    "responses": {
-        200:  serializers.UserSettingsSerializer,
-        400: serializers.UserSettingsSerializer.errors,
-        401:  None
-    }
-}

@@ -22,9 +22,3 @@ class UserApiKeySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = ["api_key"]
-
-
-class UserSettingsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Settings
-        fields = ["sw_detection_heart_beat_percentage_threshold"]

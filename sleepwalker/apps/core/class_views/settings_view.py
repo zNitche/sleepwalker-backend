@@ -2,9 +2,9 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
-from sleepwalker.api_docs.apps import authenticate_schema as docs_schema
+from sleepwalker.api_docs.apps import core_schema as docs_schema
 from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
-from sleepwalker.apps.authenticate import serializers
+from sleepwalker.apps.core import serializers
 
 
 class SettingsView(APIView):

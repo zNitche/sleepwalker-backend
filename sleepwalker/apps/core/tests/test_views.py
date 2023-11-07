@@ -49,3 +49,17 @@ class TestViews(APITestCase):
         response = self.client.post(reverse("core:reset_logs_session"))
 
         self.assertEquals(response.status_code, 200)
+
+    def test_get_user_settings_auth(self):
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
+        response = self.client.get(reverse("core:user_settings"))
+
+        self.assertEquals(response.status_code, 200)
+
+    def test_get_user_settings_not_auth(self):
+        response = self.client.get(reverse("core:user_settings"))
+        self.assertEquals(response.status_code, 401)
+
+    def test_update_user_settings_not_auth(self):
+        response = self.client.put(reverse("core:user_settings"))
+        self.assertEquals(response.status_code, 401)
