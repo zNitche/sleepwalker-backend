@@ -12,14 +12,14 @@ class ApiKeyView(APIView):
 
     @extend_schema(**docs_schema.get_api_key)
     def get(self, request, *args, **kwargs):
-        current_user = request.auth.user
+        current_user = request.user
         serializer = serializers.UserApiKeySerializer(current_user)
 
         return Response(serializer.data)
 
     @extend_schema(**docs_schema.create_api_key)
     def post(self, request, *args, **kwargs):
-        current_user = request.auth.user
+        current_user = request.user
         current_user.api_key = tokens_utils.generate_api_key()
         current_user.save()
 

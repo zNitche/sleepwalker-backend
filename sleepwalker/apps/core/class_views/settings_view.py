@@ -12,14 +12,14 @@ class SettingsView(APIView):
 
     @extend_schema(**docs_schema.get_user_settings)
     def get(self, request, *args, **kwargs):
-        current_user = request.auth.user
+        current_user = request.user
         serializer = serializers.UserSettingsSerializer(current_user.settings)
 
         return Response(serializer.data)
 
     @extend_schema(**docs_schema.update_user_settings)
     def put(self, request, *args, **kwargs):
-        current_user = request.auth.user
+        current_user = request.user
         serializer = serializers.UserSettingsSerializer(current_user.settings, data=request.data)
 
         if serializer.is_valid():

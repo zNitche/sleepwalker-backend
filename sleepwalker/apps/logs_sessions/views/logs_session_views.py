@@ -17,7 +17,7 @@ from datetime import datetime
 @api_view(["GET"])
 @authentication_classes([TokenAuth])
 def logs_session(request, session_uuid):
-    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid)
+    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid, user=request.user)
     serializer = LogsSessionSerializer(log_session)
 
     return Response(serializer.data)
@@ -27,7 +27,7 @@ def logs_session(request, session_uuid):
 @api_view(["POST"])
 @authentication_classes([ApiKeyAuth, TokenAuth])
 def close_logs_session(request, session_uuid):
-    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid)
+    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid, user=request.user)
     log_session.end_date = datetime.utcnow()
     log_session.save()
 
@@ -42,7 +42,7 @@ def close_logs_session(request, session_uuid):
 @api_view(["DELETE"])
 @authentication_classes([TokenAuth])
 def remove_logs_session(request, session_uuid):
-    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid)
+    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid, user=request.user)
     log_session.delete()
 
     return Response(status=status.HTTP_200_OK)
@@ -52,7 +52,7 @@ def remove_logs_session(request, session_uuid):
 @api_view(["GET"])
 @authentication_classes([TokenAuth])
 def sleepwalking_events(request, session_uuid):
-    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid)
+    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid, user=request.user)
     serializer = SleepwalkingEventSerializer(log_session.sleepwalking_events, many=True)
 
     return Response(serializer.data)

@@ -14,7 +14,7 @@ from sleepwalker.apps.logs_sessions.serializers.body_sensors_logs_serializer imp
 @api_view(["GET"])
 @authentication_classes([TokenAuth])
 def body_sensors_logs(request, session_uuid):
-    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid)
+    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid, user=request.user)
     serializer = BodySensorsLogsSerializer(log_session.body_sensors_logs, many=True)
 
     return Response(serializer.data)
@@ -24,7 +24,7 @@ def body_sensors_logs(request, session_uuid):
 @api_view(["POST"])
 @authentication_classes([ApiKeyAuth])
 def create_body_sensors_log(request, session_uuid):
-    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid)
+    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid, user=request.user)
     serializer = BodySensorsLogsSerializer(data=request.data)
 
     if serializer.is_valid():
