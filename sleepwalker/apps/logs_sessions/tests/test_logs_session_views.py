@@ -69,3 +69,24 @@ class TestLogsSessionViews(APITestCase):
         self.assertEquals(response.status_code, 200)
         removed_session = models.LogsSession.objects.filter(uuid=session.uuid).first()
         self.assertIs(removed_session, None)
+
+    def test_sleepwalking_events_not_auth(self):
+        response = self.client.get(reverse("logs_sessions:sleepwalking_events",
+                                           kwargs={"session_uuid": "123"}))
+        self.assertEquals(response.status_code, 401)
+
+    def test_sleepwalking_events_session_not_found(self):
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
+        response = self.client.get(reverse("logs_sessions:sleepwalking_events",
+                                           kwargs={"session_uuid": "123"}))
+
+        self.assertEquals(response.status_code, 404)
+
+    def test_sleepwalking_events(self):
+        self.client.credentials(HTTP_AUTH_TOKEN=self.auth_token.key)
+
+        session = models.LogsSession.objects.create(user=self.user)
+        response = self.client.get(reverse("logs_sessions:sleepwalking_events",
+                                           kwargs={"session_uuid": session.uuid}))
+
+        self.assertEquals(response.status_code, 200)

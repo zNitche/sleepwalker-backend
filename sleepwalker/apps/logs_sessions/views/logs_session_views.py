@@ -8,8 +8,9 @@ from sleepwalker.apps.authenticate.auth_handlers.token_auth import TokenAuth
 from sleepwalker.apps.authenticate.auth_handlers.api_key_auth import ApiKeyAuth
 from sleepwalker.apps.logs_sessions import models
 from sleepwalker.apps.logs_sessions.serializers.logs_session_serializer import LogsSessionSerializer
-from datetime import datetime
+from sleepwalker.apps.logs_sessions.serializers.sleepwalking_event_serializer import SleepwalkingEventSerializer
 from sleepwalker.utils import tasks_utils
+from datetime import datetime
 
 
 @extend_schema(**docs_schema.logs_session)
@@ -45,3 +46,13 @@ def remove_logs_session(request, session_uuid):
     log_session.delete()
 
     return Response(status=status.HTTP_200_OK)
+
+
+@extend_schema(**docs_schema.sleepwalking_events)
+@api_view(["GET"])
+@authentication_classes([TokenAuth])
+def sleepwalking_events(request, session_uuid):
+    log_session = get_object_or_404(models.LogsSession, uuid=session_uuid)
+    serializer = SleepwalkingEventSerializer(log_session.sleepwalking_events, many=True)
+
+    return Response(serializer.data)

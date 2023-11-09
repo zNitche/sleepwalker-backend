@@ -13,6 +13,7 @@ urlpatterns = [
     path("<str:session_uuid>/", logs_session_views.logs_session, name="logs_session"),
     path("<str:session_uuid>/close/", logs_session_views.close_logs_session, name="close_logs_session"),
     path("<str:session_uuid>/remove/", logs_session_views.remove_logs_session, name="remove_logs_session"),
+    path("<str:session_uuid>/sleepwalking-events", logs_session_views.sleepwalking_events, name="sleepwalking_events"),
 
     path("<str:session_uuid>/body-sensors/add/", body_sensors_logs_views.create_body_sensors_log,
          name="create_body_sensors_log"),

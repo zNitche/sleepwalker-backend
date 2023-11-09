@@ -2,6 +2,7 @@ from sleepwalker.apps.logs_sessions.serializers.logs_session_serializer import L
 from sleepwalker.apps.logs_sessions.serializers.environment_sensors_logs_serializer import EnvironmentSensorsLogsSerializer
 from sleepwalker.apps.logs_sessions.serializers.body_sensors_logs_serializer import BodySensorsLogsSerializer
 from sleepwalker.apps.logs_sessions.serializers.statistics_serializer import StatisticsSerializer
+from sleepwalker.apps.logs_sessions.serializers.sleepwalking_event_serializer import SleepwalkingEventSerializer
 
 
 logs_sessions = {
@@ -151,6 +152,19 @@ reset_current_logs_session = {
     "request": None,
     "responses": {
         200: None,
+        401: None,
+        404: None
+    }
+}
+
+
+sleepwalking_events = {
+    "description": "get sleepwalking events for session",
+    "operation_id": "sleepwalking_events",
+    "tags": ["logs_sessions"],
+    "request": None,
+    "responses": {
+        200: SleepwalkingEventSerializer,
         401: None,
         404: None
     }

@@ -330,6 +330,31 @@ paths:
           description: No response body
         '404':
           description: No response body
+  /api/sessions/{session_uuid}/sleepwalking-events:
+    get:
+      operationId: sleepwalking_events
+      description: get sleepwalking events for session
+      parameters:
+      - in: path
+        name: session_uuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - logs_sessions
+      security:
+      - TokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SleepwalkingEvent'
+          description: ''
+        '401':
+          description: No response body
+        '404':
+          description: No response body
   /api/sessions/current/:
     get:
       operationId: latest_running_logs_session
@@ -523,6 +548,21 @@ components:
       - end_date
       - start_date
       - uuid
+    SleepwalkingEvent:
+      type: object
+      properties:
+        start_date:
+          type: string
+          format: date-time
+          readOnly: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - end_date
+      - start_date
     Statistics:
       type: object
       properties:
