@@ -117,22 +117,6 @@ paths:
       responses:
         '200':
           description: No response body
-  /api/reset-current-session/:
-    post:
-      operationId: reset_logs_session
-      description: reset current logs session
-      tags:
-      - core
-      security:
-      - ApiKeyAuth: []
-      - TokenAuth: []
-      responses:
-        '200':
-          description: No response body
-        '401':
-          description: No response body
-        '404':
-          description: No response body
   /api/sessions/:
     get:
       operationId: get_logs_sessions
@@ -382,6 +366,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/LogsSession'
           description: ''
+  /api/sessions/reset-current-session/:
+    post:
+      operationId: reset_current_logs_session
+      description: reset current logs session
+      tags:
+      - logs_sessions
+      security:
+      - ApiKeyAuth: []
+      - TokenAuth: []
+      responses:
+        '200':
+          description: No response body
+        '401':
+          description: No response body
+        '404':
+          description: No response body
   /api/sessions/statistics/:
     get:
       operationId: logs_sessions_statistics

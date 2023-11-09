@@ -9,6 +9,7 @@ urlpatterns = [
     path("statistics/", logs_sessions_views.logs_sessions_statistics, name="logs_sessions_statistics"),
     path("init/", logs_sessions_views.create_logs_session, name="create_logs_session"),
     path("current/", logs_sessions_views.latest_running_logs_session, name="latest_running_logs_session"),
+    path("reset-current-session/", logs_sessions_views.reset_current_logs_session, name="reset_current_logs_session"),
     path("<str:session_uuid>/", logs_session_views.logs_session, name="logs_session"),
     path("<str:session_uuid>/close/", logs_session_views.close_logs_session, name="close_logs_session"),
     path("<str:session_uuid>/remove/", logs_session_views.remove_logs_session, name="remove_logs_session"),

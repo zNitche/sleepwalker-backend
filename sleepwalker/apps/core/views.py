@@ -30,16 +30,3 @@ def event_detected(request):
 
     response_status = status.HTTP_200_OK if detected_for_user else status.HTTP_204_NO_CONTENT
     return Response(status=response_status)
-
-
-@extend_schema(**docs_schema.reset_logs_session)
-@api_view(["POST"])
-@authentication_classes([ApiKeyAuth, TokenAuth])
-def reset_logs_session(request):
-    detected_for_user = tasks_utils.check_if_sleepwalking_detected_for_user(request.user.id)
-
-    if detected_for_user:
-        tasks_utils.reset_sleepwalking_logger_for_user(request.user.id)
-
-    response_status = status.HTTP_200_OK if detected_for_user else status.HTTP_204_NO_CONTENT
-    return Response(response_status)

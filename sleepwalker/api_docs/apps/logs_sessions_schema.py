@@ -142,3 +142,16 @@ latest_running_logs_session = {
         404: None
     }
 }
+
+
+reset_current_logs_session = {
+    "description": "reset current logs session",
+    "operation_id": "reset_current_logs_session",
+    "tags": ["logs_sessions"],
+    "request": None,
+    "responses": {
+        200: None,
+        401: None,
+        404: None
+    }
+}
