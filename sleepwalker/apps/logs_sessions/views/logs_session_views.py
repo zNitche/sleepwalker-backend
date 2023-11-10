@@ -28,12 +28,14 @@ def logs_session(request, session_uuid):
 @authentication_classes([ApiKeyAuth, TokenAuth])
 def close_logs_session(request, session_uuid):
     log_session = get_object_or_404(models.LogsSession, uuid=session_uuid, user=request.user)
-    log_session.end_date = datetime.utcnow()
-    log_session.save()
 
-    sleepwalking_process_id = tasks_utils.get_task_id(request.user.id, session_uuid,
-                                                      "SleepwalkingDetectionProcess")
-    tasks_utils.force_stop_task_by_id(sleepwalking_process_id)
+    if log_session.end_date is None:
+        log_session.end_date = datetime.utcnow()
+        log_session.save()
+
+        sleepwalking_process_id = tasks_utils.get_task_id(request.user.id, session_uuid,
+                                                          "SleepwalkingDetectionProcess")
+        tasks_utils.force_stop_task_by_id(sleepwalking_process_id)
 
     return Response(status=status.HTTP_200_OK)
 
