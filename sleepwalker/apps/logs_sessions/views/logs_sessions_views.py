@@ -79,8 +79,8 @@ def create_logs_session(request):
 def logs_sessions_statistics(request):
     log_sessions_for_user = models.LogsSession.objects.filter(user=request.user).order_by("-start_date")
 
-    first_session = log_sessions_for_user.first()
-    last_session = log_sessions_for_user.last()
+    first_session = log_sessions_for_user.last()
+    last_session = log_sessions_for_user.first()
 
     data = {
         "logs_sessions": log_sessions_for_user.count(),
