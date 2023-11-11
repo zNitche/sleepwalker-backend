@@ -11,13 +11,15 @@ from sleepwalker.apps.logs_sessions.serializers.logs_session_serializer import L
 from sleepwalker.apps.logs_sessions.serializers.statistics_serializer import StatisticsSerializer
 from sleepwalker.utils import models_utils, tasks_utils
 from sleepwalker.apps.core import tasks as celery_tasks
+from sleepwalker.utils.filtersUtils import get_logs_sessions_filters
 
 
 @extend_schema(**docs_schema.logs_sessions)
 @api_view(["GET"])
 @authentication_classes([TokenAuth])
 def logs_sessions(request):
-    log_sessions_for_user = models.LogsSession.objects.filter(user=request.user).order_by("-start_date").all()
+    filters = get_logs_sessions_filters(request.GET)
+    log_sessions_for_user = models.LogsSession.objects.filter(user=request.user, **filters).order_by("-start_date").all()
 
     paginator = LogsSessionsPagination()
     page_results = paginator.paginate_queryset(log_sessions_for_user, request)
