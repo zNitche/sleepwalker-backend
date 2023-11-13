@@ -247,7 +247,11 @@ if DEBUG:
         ],
         "SERVE_INCLUDE_SCHEMA": False,
         "DISABLE_ERRORS_AND_WARNINGS": True,
-        "TAGS": ["auth", "user", "core", "logs_sessions", "body_sensors_logs", "environment_sensors_logs"]
+        "TAGS": ["auth", "user", "core", "logs_sessions", "body_sensors_logs", "environment_sensors_logs"],
+        "SWAGGER_UI_SETTINGS": {
+            "persistAuthorization": True,
+        },
+        "SWAGGER_UI_DIST": "//unpkg.com/swagger-ui-dist@5.9.4"
     }
 
 API_AUTH_TOKEN_LIFESPAN = datetime.timedelta(days=7)

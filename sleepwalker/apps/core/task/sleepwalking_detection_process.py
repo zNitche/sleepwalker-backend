@@ -1,10 +1,9 @@
-import datetime
-
 from sleepwalker.celery_tasks.task_base import TaskBase
 from sleepwalker.consts import TasksDelays, ProcessesConsts
 from sleepwalker.apps.logs_sessions import models
 import time
 import statistics
+import datetime
 
 
 class SleepwalkingDetectionProcess(TaskBase):
